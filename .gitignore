@@ -1,0 +1,22 @@
+# Archivos de Unity que no deben subirse
+Library/
+Temp/
+Logs/
+UserSettings/
+MemoryCaptures/
+obj/
+*.csproj
+*.sln
+
+# Compilaciones y archivos generados
+Builds/
+Build/
+Assets/StreamingAssets/*.mp4
+
+# Archivos personales o configuraciones de usuario
+*.userprefs
+*.pidb
+*.suo
+*.bak
+*.log
+*.swp
