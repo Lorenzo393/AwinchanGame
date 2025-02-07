@@ -1,1 +1,2 @@
 # AwinchanGame
+Juego terror desarrollado en unity en el que eres un estudiante que tiene que recuperar su celular de la escuela porque el maestro se lo quitó por usarlo en clase. Entonces de noche el protagonista entra en el colegio por una ventana elevada para así recuperarlo. Una vez recuperado el teléfono tendrás que buscar una forma de salir de la escuela evitando “al guardia” ya que no puedes salir por donde entraste. Pero esto no será tan fácil ya que awinchan te está vigilando.

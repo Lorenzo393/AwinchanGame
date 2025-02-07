@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Awinchan.sln"
+    "dotnet.defaultSolution": "AwinchanGame.sln"
 }
