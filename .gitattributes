@@ -1,11 +1,31 @@
+# Modelos 3D y texturas (Archivos binarios grandes, mejor con LFS)
 *.fbx filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+
+# Archivos de sonido y video (Archivos pesados, mejor con LFS)
 *.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+
+# Librerías y ejecutables (Binarios pesados, mejor con LFS)
 *.dll filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
 *.dylib filter=lfs diff=lfs merge=lfs -text
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
 *.exe filter=lfs diff=lfs merge=lfs -text
-*.png filter=lfs diff=lfs merge=lfs -text
-*.ogg filter=lfs diff=lfs merge=lfs -text
+
+# Archivos de Unity (Binarios, mejor con LFS)
+*.unity filter=lfs diff=lfs merge=lfs -text
+*.prefab filter=lfs diff=lfs merge=lfs -text
+*.asset filter=lfs diff=lfs merge=lfs -text
+
+# Archivos de Unity en formato texto (para evitar conflictos y permitir merges)
+*.anim text
+*.controller text
+*.mat text
+*.physicMaterial text
+*.shader text
+
+# Ignorar cambios en metadatos de Unity generados automáticamente
+*.meta text
