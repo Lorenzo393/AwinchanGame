@@ -1,5 +1,6 @@
 using System.Numerics;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,16 +8,17 @@ public class PlayerController : MonoBehaviour
     private float hor;
     private float ver;
     private UnityEngine.Vector3 playerInput;
-    public float speed; // 10f
-    public float jumpH; // 3f
+    public float speedNormal = 5.0f; // REFERENCE VAL
+    public float speedRun = 10.0f; // REFERENCE VAL
+    public float jumpH = 3.0f; // REFERENCE VAL
     public CharacterController player;
 
     public Transform groundCheck;
     public LayerMask groundMask;
-    public float groundDist; // 0.3f
+    public float groundDist = 0.3f; // REFERENCE VAL
     private bool isGrounded;
 
-    public float gravity = -9.8f;
+    public float gravity = -9.8f; // REFERENCE VAL
     private UnityEngine.Vector3 velocity;
     
     void Start(){
@@ -34,7 +36,9 @@ public class PlayerController : MonoBehaviour
         playerInput = transform.right * hor + transform.forward * ver;
         playerInput = UnityEngine.Vector3.ClampMagnitude(playerInput,1);
 
+        float speed = Input.GetKey(KeyCode.LeftShift) ? speedRun : speedNormal;
+
         player.Move(speed * Time.deltaTime * playerInput);
         player.Move(velocity*Time.deltaTime);
-    }   
+    }
 }
