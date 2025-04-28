@@ -1,38 +1,26 @@
 fileFormatVersion: 2
-guid: 40f8bd6a7a4fd0546babb86424cedae4
-labels:
-- Terrain
+guid: 53ee823ff543aa24d855d8f9f8c2b87b
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Stone3_LOD0
-    100004: Stone3_LOD1
-    100006: Stone3_LOD2
     400000: //RootNode
-    400002: Stone3_LOD0
-    400004: Stone3_LOD1
-    400006: Stone3_LOD2
+    2100000: Material.005
+    2100002: Material.006
     2300000: //RootNode
-    2300002: Stone3_LOD0
-    2300004: Stone3_LOD1
-    2300006: Stone3_LOD2
     3300000: //RootNode
-    3300002: Stone3_LOD0
-    3300004: Stone3_LOD1
-    3300006: Stone3_LOD2
-    4300000: Stone3
-    4300002: Stone3_LOD0
-    4300004: Stone3_LOD1
-    4300006: Stone3_LOD2
-    9500000: //RootNode
-    20500000: //RootNode
+    4300000: Phone
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Stone
-    second: {fileID: 2100000, guid: 8918331320feeb1428adceb85606a3a4, type: 2}
+      name: Material.005
+    second: {fileID: 2100000, guid: 05ebba48484e3b1478045899e21d98da, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.006
+    second: {fileID: 2100000, guid: 017a6494a230b02479a30169fe2e1cf1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -62,17 +50,15 @@ ModelImporter:
     clipAnimations: []
     isReadable: 1
   meshes:
-    lODScreenPercentages:
-    - 0.25
-    - 0.125
-    - 0.01
+    lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -80,7 +66,7 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
-    indexFormat: 1
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -92,8 +78,11 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-    normalCalculationMode: 0
-  importAnimation: 0
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -119,8 +108,8 @@ ModelImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 103573
-  packageName: Fantasy landscape
-  packageVersion: 2.0
-  assetPath: Assets/FantasyEnvironments/Environments/FBX/Stone3.fbx
-  uploadId: 647578
+  productId: 181455
+  packageName: '[Free] Phone'
+  packageVersion: 1.0
+  assetPath: Assets/[Free] Phone/fbx and materials/phone.fbx
+  uploadId: 403685
