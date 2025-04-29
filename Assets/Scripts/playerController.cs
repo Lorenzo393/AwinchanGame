@@ -31,24 +31,23 @@ public class PlayerController : MonoBehaviour
     public Slider staminaSlider;
     public Image staminaFillImage;
 
-    void Start()
-    {
+    public float staminaRecoveryDelay = 1.25f;
+    private float regenDelayTimer = 0f;
+    private bool isRegenerating = true;
+    void Start(){
         player = GetComponent<CharacterController>();
         currentStamina = maxStamina;
-
         if (staminaSlider != null)
             staminaSlider.maxValue = maxStamina;
     }
 
-    void Update()
-    {
+    void Update(){
         // Ground check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDist, groundMask);
         if (isGrounded && velocity.y < 0) velocity.y = -2f;
 
         // Jumping
-        if (Input.GetButtonDown("Jump") && isGrounded)
-            velocity.y = Mathf.Sqrt(jumpH * -2f * gravity);
+        if (Input.GetButtonDown("Jump") && isGrounded) velocity.y = Mathf.Sqrt(jumpH * -2f * gravity);
         velocity.y += gravity * Time.deltaTime;
 
         // Input
@@ -57,32 +56,40 @@ public class PlayerController : MonoBehaviour
         playerInput = transform.right * hor + transform.forward * ver;
         playerInput = UnityEngine.Vector3.ClampMagnitude(playerInput, 1);
 
-        // Sprint + Stamina
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0 && playerInput.magnitude > 0;
+        // Check if sprinting is allowed
+        bool wantsToSprint = Input.GetKey(KeyCode.LeftShift) && playerInput.magnitude > 0;
+        bool isSprinting = wantsToSprint && currentStamina > 0;
+
         float speed = isSprinting ? speedRun : speedNormal;
 
-        if (isSprinting)
-        {
+        // Handle stamina
+        if (isSprinting){
             currentStamina -= staminaDrainRate * Time.deltaTime;
-            if (currentStamina < 0) currentStamina = 0;
+            regenDelayTimer = staminaRecoveryDelay;
+            isRegenerating = false;
+            if (currentStamina <= 0){
+                currentStamina = 0;
+                isSprinting = false;
+            }
         }
-        else if (isGrounded) // regenerate grouded
-        {
-            currentStamina += staminaRegenRate * Time.deltaTime;
-            if (currentStamina > maxStamina) currentStamina = maxStamina;
+        else{
+            if(regenDelayTimer > 0)regenDelayTimer -= Time.deltaTime;
+            else isRegenerating = true;
+            if (isGrounded && isRegenerating && currentStamina < maxStamina){
+                currentStamina += staminaRegenRate * Time.deltaTime;
+                if (currentStamina > maxStamina) currentStamina = maxStamina;
+            }
         }
 
-        // Update UI
-        if (staminaSlider != null) staminaSlider.value = currentStamina;
-
+        // UI Update
+        if (staminaSlider != null)
+            staminaSlider.value = currentStamina;
         if (staminaFillImage != null){
-        float staminaPercent = currentStamina / maxStamina;
-
-        if (staminaPercent > 0.5f) staminaFillImage.color = Color.green;
-        else if (staminaPercent > 0.2f) staminaFillImage.color = Color.yellow;
-        else staminaFillImage.color = Color.red;
+            float staminaPercent = currentStamina / maxStamina;
+            if (staminaPercent > 0.5f) staminaFillImage.color = Color.green;
+            else if (staminaPercent > 0.2f) staminaFillImage.color = Color.yellow;
+            else staminaFillImage.color = Color.red;
         }
-
 
         // Movement
         player.Move(speed * Time.deltaTime * playerInput);
