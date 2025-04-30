@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class playerInteractions : MonoBehaviour
@@ -17,8 +18,10 @@ public class playerInteractions : MonoBehaviour
     void Update(){
         if(Input.GetMouseButtonDown(0)){ //Click izq
             if(Physics.Raycast(playerCameraTransform.position,playerCameraTransform.forward,out RaycastHit raycastHit,2.5f,pickUpLayerMask)){
-                raycastHit.transform.gameObject.SetActive(false);
-                linternaObtenida = true;
+                if(raycastHit.transform.TryGetComponent(out Telefono tel)){
+                    tel.gameObject.SetActive(false);
+                    linternaObtenida = true;
+                }
             }
         }
         if(Input.GetMouseButtonDown(1) && linternaObtenida){ //Click der
