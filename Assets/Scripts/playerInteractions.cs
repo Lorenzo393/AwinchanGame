@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class playerInteractions : MonoBehaviour
 {
-    public GameObject bloque;
     public GameObject telefono;
     public Transform playerCameraTransform;
     public LayerMask pickUpLayerMask;

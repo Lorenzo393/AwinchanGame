@@ -10,17 +10,17 @@ public class PlayerController : MonoBehaviour
     private float hor;
     private float ver;
     private UnityEngine.Vector3 playerInput;
-    public float speedNormal = 5.0f; // REFERENCE VAL
-    public float speedRun = 10.0f; // REFERENCE VAL
-    public float jumpH = 3.0f; // REFERENCE VAL
+    [SerializeField] private float speedNormal = 5.0f; // REFERENCE VAL
+    [SerializeField] private float speedRun = 10.0f; // REFERENCE VAL
+    [SerializeField] private float jumpH = 3.0f; // REFERENCE VAL
     public CharacterController player;
     
     public Transform groundCheck;
     public LayerMask groundMask;
-    public float groundDist = 0.3f; // REFERENCE VAL
+    [SerializeField] private float groundDist = 0.3f; // REFERENCE VAL
     private bool isGrounded;
 
-    public float gravity = -9.8f; // REFERENCE VAL
+    [SerializeField] private float gravity = -9.8f; // REFERENCE VAL
     private UnityEngine.Vector3 velocity;
     
     
@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public Slider staminaSlider;
     public Image staminaFillImage;
 
-    public float staminaRecoveryDelay = 1.25f;
+    [SerializeField] private float staminaRecoveryDelay = 1.25f;
     private float regenDelayTimer = 0f;
     private bool isRegenerating = true;
     void Start(){
