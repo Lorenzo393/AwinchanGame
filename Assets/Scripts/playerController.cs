@@ -10,38 +10,40 @@ public class PlayerController : MonoBehaviour
     private float hor;
     private float ver;
     private UnityEngine.Vector3 playerInput;
-    public float speedNormal = 5.0f; // REFERENCE VAL
-    public float speedRun = 10.0f; // REFERENCE VAL
-    public float jumpH = 3.0f; // REFERENCE VAL
+    [SerializeField] private float speedNormal = 5.0f; // REFERENCE VAL
+    [SerializeField] private float speedRun = 10.0f; // REFERENCE VAL
+    [SerializeField] private float jumpH = 3.0f; // REFERENCE VAL
     public CharacterController player;
     
     public Transform groundCheck;
     public LayerMask groundMask;
-    public float groundDist = 0.3f; // REFERENCE VAL
+    [SerializeField] private float groundDist = 0.3f; // REFERENCE VAL
     private bool isGrounded;
 
-    public float gravity = -9.8f; // REFERENCE VAL
+    [SerializeField] private float gravity = -9.8f; // REFERENCE VAL
     private UnityEngine.Vector3 velocity;
     
     
-    public float maxStamina = 120f;
+    [SerializeField] private float maxStamina = 120f;
     private float currentStamina;
-    public float staminaDrainRate = 25f; // Xs
-    public float staminaRegenRate = 15f; // Xs
+    [SerializeField] private float staminaDrainRate = 25f; // Xs
+    [SerializeField] private float staminaRegenRate = 15f; // Xs
     public Slider staminaSlider;
     public Image staminaFillImage;
 
-    public float staminaRecoveryDelay = 1.25f;
-    private float regenDelayTimer = 0f;
+    [SerializeField] private float staminaRecoveryDelay = 1.25f;
+    
     private bool isRegenerating = true;
-    void Start(){
+    
+    private void Start()
+    {
         player = GetComponent<CharacterController>();
         currentStamina = maxStamina;
         if (staminaSlider != null)
             staminaSlider.maxValue = maxStamina;
     }
 
-    void Update(){
+    private void Update(){
         // Ground check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDist, groundMask);
         if (isGrounded && velocity.y < 0) velocity.y = -2f;
@@ -62,20 +64,26 @@ public class PlayerController : MonoBehaviour
 
         float speed = isSprinting ? speedRun : speedNormal;
 
+        float regenDelayTimer = 0f;
+
         // Handle stamina
-        if (isSprinting){
+        if (isSprinting)
+        {
             currentStamina -= staminaDrainRate * Time.deltaTime;
             regenDelayTimer = staminaRecoveryDelay;
             isRegenerating = false;
-            if (currentStamina <= 0){
+            if (currentStamina <= 0)
+            {
                 currentStamina = 0;
                 isSprinting = false;
             }
         }
-        else{
-            if(regenDelayTimer > 0)regenDelayTimer -= Time.deltaTime;
+        else
+        {
+            if (regenDelayTimer > 0) regenDelayTimer -= Time.deltaTime;
             else isRegenerating = true;
-            if (isGrounded && isRegenerating && currentStamina < maxStamina){
+            if (isGrounded && isRegenerating && currentStamina < maxStamina)
+            {
                 currentStamina += staminaRegenRate * Time.deltaTime;
                 if (currentStamina > maxStamina) currentStamina = maxStamina;
             }
