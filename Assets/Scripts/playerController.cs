@@ -24,24 +24,26 @@ public class PlayerController : MonoBehaviour
     private UnityEngine.Vector3 velocity;
     
     
-    public float maxStamina = 120f;
+    [SerializeField] private float maxStamina = 120f;
     private float currentStamina;
-    public float staminaDrainRate = 25f; // Xs
-    public float staminaRegenRate = 15f; // Xs
+    [SerializeField] private float staminaDrainRate = 25f; // Xs
+    [SerializeField] private float staminaRegenRate = 15f; // Xs
     public Slider staminaSlider;
     public Image staminaFillImage;
 
     [SerializeField] private float staminaRecoveryDelay = 1.25f;
-    private float regenDelayTimer = 0f;
+    
     private bool isRegenerating = true;
-    void Start(){
+    
+    private void Start()
+    {
         player = GetComponent<CharacterController>();
         currentStamina = maxStamina;
         if (staminaSlider != null)
             staminaSlider.maxValue = maxStamina;
     }
 
-    void Update(){
+    private void Update(){
         // Ground check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDist, groundMask);
         if (isGrounded && velocity.y < 0) velocity.y = -2f;
@@ -62,20 +64,26 @@ public class PlayerController : MonoBehaviour
 
         float speed = isSprinting ? speedRun : speedNormal;
 
+        float regenDelayTimer = 0f;
+
         // Handle stamina
-        if (isSprinting){
+        if (isSprinting)
+        {
             currentStamina -= staminaDrainRate * Time.deltaTime;
             regenDelayTimer = staminaRecoveryDelay;
             isRegenerating = false;
-            if (currentStamina <= 0){
+            if (currentStamina <= 0)
+            {
                 currentStamina = 0;
                 isSprinting = false;
             }
         }
-        else{
-            if(regenDelayTimer > 0)regenDelayTimer -= Time.deltaTime;
+        else
+        {
+            if (regenDelayTimer > 0) regenDelayTimer -= Time.deltaTime;
             else isRegenerating = true;
-            if (isGrounded && isRegenerating && currentStamina < maxStamina){
+            if (isGrounded && isRegenerating && currentStamina < maxStamina)
+            {
                 currentStamina += staminaRegenRate * Time.deltaTime;
                 if (currentStamina > maxStamina) currentStamina = maxStamina;
             }

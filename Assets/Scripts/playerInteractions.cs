@@ -9,12 +9,12 @@ public class playerInteractions : MonoBehaviour
     private bool linternaEncendida;
     private bool linternaObtenida;
 
-    void Start(){
+    private void Start(){
         linternaEncendida = false;
         linternaObtenida = false;
     }
 
-    void Update(){
+    private void Update(){
         if(Input.GetMouseButtonDown(0)){ //Click izq
             if(Physics.Raycast(playerCameraTransform.position,playerCameraTransform.forward,out RaycastHit raycastHit,2.5f,pickUpLayerMask)){
                 if(raycastHit.transform.TryGetComponent(out Telefono tel)){

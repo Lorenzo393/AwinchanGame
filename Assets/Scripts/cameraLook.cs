@@ -4,13 +4,13 @@ using UnityEngine;
 public class CameraLook : MonoBehaviour
 {
     private float xRotation;
-    public float mouseSens; // 300
+    [SerializeField] private float mouseSens; // 300
     public Transform player;
-    void Start(){
+    private void Start(){
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-    void Update(){
+    private void Update(){
         float mouseX = Input.GetAxis("Mouse X") * mouseSens * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y")* mouseSens * Time.deltaTime;
 
