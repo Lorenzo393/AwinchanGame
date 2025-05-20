@@ -5,7 +5,7 @@ public class CameraLook : MonoBehaviour
 {
     private float xRotation;
     [SerializeField] private float mouseSens; // 300
-    public Transform player;
+    [SerializeField] private Transform player;
     private void Start(){
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

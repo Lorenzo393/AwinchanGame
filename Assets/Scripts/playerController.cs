@@ -13,10 +13,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speedNormal = 5.0f; // REFERENCE VAL
     [SerializeField] private float speedRun = 10.0f; // REFERENCE VAL
     [SerializeField] private float jumpH = 3.0f; // REFERENCE VAL
-    public CharacterController player;
+    [SerializeField] private CharacterController player;
     
-    public Transform groundCheck;
-    public LayerMask groundMask;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundMask;
     [SerializeField] private float groundDist = 0.3f; // REFERENCE VAL
     private bool isGrounded;
 
@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
     private float currentStamina;
     [SerializeField] private float staminaDrainRate = 25f; // Xs
     [SerializeField] private float staminaRegenRate = 15f; // Xs
-    public Slider staminaSlider;
-    public Image staminaFillImage;
+    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private Image staminaFillImage;
 
     [SerializeField] private float staminaRecoveryDelay = 1.25f;
     

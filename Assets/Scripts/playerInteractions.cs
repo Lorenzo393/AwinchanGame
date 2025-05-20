@@ -3,16 +3,11 @@ using UnityEngine;
 
 public class playerInteractions : MonoBehaviour
 {
-    public GameObject telefono;
-    public Transform playerCameraTransform;
-    public LayerMask pickUpLayerMask;
-    private bool linternaEncendida;
-    private bool linternaObtenida;
-
-    private void Start(){
-        linternaEncendida = false;
-        linternaObtenida = false;
-    }
+    [SerializeField] private GameObject telefono;
+    [SerializeField] private Transform playerCameraTransform;
+    [SerializeField] private LayerMask pickUpLayerMask;
+    private bool linternaEncendida = false;
+    private bool linternaObtenida = false;
 
     private void Update(){
         if(Input.GetMouseButtonDown(0)){ //Click izq
