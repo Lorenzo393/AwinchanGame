@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class playerInteractions : MonoBehaviour
 {
+    /*
     [SerializeField] private GameObject telefono;
     [SerializeField] private Transform playerCameraTransform;
     [SerializeField] private LayerMask pickUpLayerMask;
@@ -23,4 +24,5 @@ public class playerInteractions : MonoBehaviour
         }
         telefono.SetActive(linternaEncendida);
     }
+    */
 }
