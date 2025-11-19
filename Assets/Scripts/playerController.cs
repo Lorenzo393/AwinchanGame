@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-
 public class PlayerController : MonoBehaviour
 {
     // Character controller
@@ -10,7 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameInput gameInput;
 
     // Velocidad a la que se mueve el personaje
-    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float speed = 7.0f;
+
+    // Referencia de la camara para ver hacia donde esta viendo el jugador
+    [SerializeField] private new Transform camera;
 
     // Vector2 que guarda el input
     private Vector2 inputVectorMovement;
@@ -23,14 +25,13 @@ public class PlayerController : MonoBehaviour
     private void Update(){
         // Mueve al personaje
         HandleMovement();
-
-        //Debug.Log(inputVectorMovement);
     }
 
     private void HandleMovement(){
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 movementDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        Vector3 movementDirection = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
 
+        // SimpleMove es como el move pero aplica gravedad y multiplica por Time.deltaTime
         characterController.SimpleMove(movementDirection * speed);
     }
 
