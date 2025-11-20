@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private new Transform camera;
     // Variable para saber si el jugador esta corriendo
     private float currentSpeed;
+    // Fuerza de la gravedad/ caida del personaje
+    private const float gravityForce = -20.0f;
+    // Fuerza de empuje normal/ fuerza que se aplica con el personaje tocando el suelo 
+    private const float groundStickForce = -2.0f;
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e)
     {
         currentSpeed = runningSpeed;
@@ -40,11 +44,11 @@ public class PlayerController : MonoBehaviour
         // Inicializo la velocidad de movimiento actual
         currentSpeed = walkingSpeed;
 
-        // 
+        // Evento correr iniciado
         gameInput.OnSprintActionStarted += GameInput_OnSprintActionStarted;
-        // 
+        // Evento correr terminado
         gameInput.OnSprintActionCanceled += GameInput_OnSprintActionCanceled;
-        // 
+        // Evento interaccion
         gameInput.OnInteractAction += GameInput_OnInteractAction;
     }
 
@@ -55,11 +59,17 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement(){
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 movementDirection = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
+        Vector3 playerMovement = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
+        playerMovement.y = 0f;
 
+        // Multiplico la direccion de movimiento con la velocidad actual
+        playerMovement *= GetCurrentSpeed();
 
-        // SimpleMove es como el move pero aplica gravedad y multiplica por Time.deltaTime
-        characterController.SimpleMove(movementDirection * GetCurrentSpeed());
+        // Aplico gravedad
+        playerMovement.y = characterController.isGrounded? groundStickForce : gravityForce;
+
+        // Mueve al personaje multiplicando su movimiento por deltaTime
+        characterController.Move(playerMovement * Time.deltaTime);
     }
 
     public float GetCurrentSpeed()
