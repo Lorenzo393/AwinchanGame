@@ -6,8 +6,10 @@ public class GameInput : MonoBehaviour
 {
     // Se tiene que llamar igual que el script generado por el input system.
     private InputSystem inputSystem;
-    // Evento correr
-    public event EventHandler OnSprintAction;
+    // Evento correr iniciado
+    public event EventHandler OnSprintActionStarted;
+    // Evento correr cancelado
+    public event EventHandler OnSprintActionCanceled;
     // Evento interaccion
     public event EventHandler OnInteractAction;
     private void Awake(){
@@ -17,8 +19,11 @@ public class GameInput : MonoBehaviour
         // Tenemos que activar manualmente cada uno de los action maps.
         inputSystem.Player.Enable();
 
-        // Seteo evento correr cuando se apreta el bindeo sprint
-        inputSystem.Player.Sprint.performed += Sprint_performed;
+        // Seteo evento correr cuando se apreta el boton de sprint
+        inputSystem.Player.Sprint.started += Sprint_started;
+        // Seteo evento correr cuando se deja de apretar el boton de sprint
+        inputSystem.Player.Sprint.canceled += Sprint_canceled;
+
         // Seteo evento interactuar cuando se apreta el bindeo sprint
         inputSystem.Player.Interact.performed += Interact_performed;
     }
@@ -31,8 +36,11 @@ public class GameInput : MonoBehaviour
         return inputVectorMovement;
     }
 
-    private void Sprint_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
-        OnSprintAction?.Invoke(this, EventArgs.Empty);
+    private void Sprint_started(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnSprintActionStarted?.Invoke(this, EventArgs.Empty);
+    }
+    private void Sprint_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnSprintActionCanceled?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
