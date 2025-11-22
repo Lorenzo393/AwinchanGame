@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         // Multiplico la direccion de movimiento con la velocidad actual
         playerMovement *= GetCurrentSpeed();
 
-        // Aplico gravedad
+        // Aplico gravedad sin que sea multiplicada por la velocidad del jugador
         playerMovement.y = characterController.isGrounded? groundStickForce : gravityForce;
 
         // Mueve al personaje multiplicando su movimiento por deltaTime
