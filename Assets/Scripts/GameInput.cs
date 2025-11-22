@@ -12,6 +12,8 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnSprintActionCanceled;
     // Evento interaccion
     public event EventHandler OnInteractAction;
+    // Evento linterna
+    public event EventHandler OnFlashlightAction;
     private void Awake(){
         // Inicializo el script
         inputSystem = new InputSystem();
@@ -26,6 +28,9 @@ public class GameInput : MonoBehaviour
 
         // Seteo evento interactuar cuando se apreta el bindeo sprint
         inputSystem.Player.Interact.performed += Interact_performed;
+
+        // Seteo evento linterna
+        inputSystem.Player.Flashlight.performed += Flashlight_performed;
     }
 
     public Vector2 GetMovementVectorNormalized(){
@@ -42,9 +47,10 @@ public class GameInput : MonoBehaviour
     private void Sprint_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnSprintActionCanceled?.Invoke(this, EventArgs.Empty);
     }
-
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
-
+    private void Flashlight_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnFlashlightAction?.Invoke(this, EventArgs.Empty);
+    }
 }

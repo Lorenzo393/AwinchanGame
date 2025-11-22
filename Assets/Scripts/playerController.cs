@@ -37,6 +37,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Interact");
     }
+    private void GameInput_OnFlashlightAction(object sender, System.EventArgs e)
+    {
+        Debug.Log("Flashlight");
+    }
     private void Start(){
         // Inicializa el character controller
         characterController = GetComponent<CharacterController>();
@@ -50,6 +54,8 @@ public class PlayerController : MonoBehaviour
         gameInput.OnSprintActionCanceled += GameInput_OnSprintActionCanceled;
         // Evento interaccion
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        // Evento linterna
+        gameInput.OnFlashlightAction += GameInput_OnFlashlightAction;
     }
 
     private void Update(){
