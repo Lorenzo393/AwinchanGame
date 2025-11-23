@@ -17,12 +17,16 @@ public class PlayerController : MonoBehaviour
 
     // Referencia de la camara para ver hacia donde esta viendo el jugador
     [SerializeField] private new Transform camera;
+    // Transform del telefono
+    [SerializeField] private Transform phone;
     // Variable para saber si el jugador esta corriendo
     private float currentSpeed;
     // Fuerza de la gravedad/ caida del personaje
     private const float gravityForce = -20.0f;
     // Fuerza de empuje normal/ fuerza que se aplica con el personaje tocando el suelo 
     private const float groundStickForce = -2.0f;
+    // Luz del telefono prendido/apagado
+    private bool phoneLight = false;
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e)
     {
         currentSpeed = runningSpeed;
@@ -39,7 +43,12 @@ public class PlayerController : MonoBehaviour
     }
     private void GameInput_OnFlashlightAction(object sender, System.EventArgs e)
     {
-        Debug.Log("Flashlight");
+        if(phoneLight == false){
+            phoneLight = true;
+        }
+        else if(phoneLight == true){
+            phoneLight = false;
+        }
     }
     private void Start(){
         // Inicializa el character controller
@@ -61,6 +70,7 @@ public class PlayerController : MonoBehaviour
     private void Update(){
         // Mueve al personaje
         HandleMovement();
+        phone.gameObject.SetActive(phoneLight);
     }
 
     private void HandleMovement(){
