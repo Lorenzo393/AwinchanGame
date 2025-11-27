@@ -20,7 +20,9 @@ public class PlayerInteract : MonoBehaviour
     private void PlayerInteraction(){
         float interactDistance = 3.0f;
         if(Physics.Raycast(camera.position,camera.forward,out RaycastHit raycastHit, interactDistance, interactableLayerMask)){
-            Debug.Log(raycastHit.transform);
+            IInteractable interactable = raycastHit.collider.GetComponent<IInteractable>();
+            if (interactable != null) interactable.Interact();
+            else Debug.Log("No es interactuable");
         }
     }
 }
