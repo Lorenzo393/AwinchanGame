@@ -4,24 +4,12 @@ public class LightSwitchAnimation : MonoBehaviour
 {
     // Referencia a la manijita del switch
     [SerializeField] private Transform lightSwitch;
-    // Referencia al evento de interaccion con el switch
-    private LightSwitchInteraction lightSwitchInteraction;
-    // Encendido/apagado de las luces
-    private bool lightState = false;
 
-
-    private void LightSwitchInteraction_OnClickSwitch(object sender, System.EventArgs e){
-        if(lightState == false){
-            lightState = true;
-        } else if (lightState == true){
-            lightState = false;
-        }
-        Animation(lightState);
-    }
-    private void Awake(){
-        lightSwitchInteraction = GetComponent<LightSwitchInteraction>();
+    private void LightSwitchInteraction_OnClickSwitch(object sender, LightSwitchInteraction.OnClickSwitchEventArgs e){
+        Animation(e.lightState);
     }
     private void Start(){
+        LightSwitchInteraction lightSwitchInteraction = GetComponent<LightSwitchInteraction>();
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }
     private void Animation(bool lightState){
