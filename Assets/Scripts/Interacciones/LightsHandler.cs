@@ -12,6 +12,7 @@ public class LightsHandler : MonoBehaviour
         LightsManager(e.lightState);
     }
     private void Start(){
+        // Evento que se dispara cuando se interactua con el switch de la luz
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }
     private void LightsManager(bool lightState){
