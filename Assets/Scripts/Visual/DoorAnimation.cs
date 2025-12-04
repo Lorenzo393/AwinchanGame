@@ -1,25 +1,36 @@
+using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 
 public class DoorAnimation : MonoBehaviour, IInteractable
 {
+    private Quaternion closedDoorRot;
+    private Quaternion openedDoorRot;
+    private float doorSpeed = 2f;
     private bool isOpen = false;
+    private bool isMoving = false;
     public void Interact(){
-        if(isOpen == false){
-            isOpen = true;
-            OpenDoor();
-        } else if(isOpen == true){
-            isOpen = false;
-            CloseDoor();
+        if (!isMoving){
+            if(isOpen == false){
+                StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
+                isOpen = true;
+            } else if(isOpen == true){
+                StartCoroutine(OpenCloseDoor(openedDoorRot, closedDoorRot));
+                isOpen = false;
+            }
         }
     }
     private void Start(){
-        CloseDoor();
+        closedDoorRot = transform.localRotation;
+        openedDoorRot = Quaternion.Euler(transform.localRotation.x, (transform.localRotation.y -90), transform.localRotation.z);
+        transform.localRotation = closedDoorRot;
     }
-    private void CloseDoor(){
-        transform.localRotation = Quaternion.Euler(0,0,0);
-    }
-    private void OpenDoor(){
-        transform.localRotation = Quaternion.Euler(0,-90,0);
+    IEnumerator OpenCloseDoor(Quaternion inicialRotation, Quaternion finalRotation){
+        isMoving = true;
+        for(float t = 0f ; t <= 1.0f ; t += Time.deltaTime * doorSpeed){
+            transform.localRotation = Quaternion.Slerp(inicialRotation, finalRotation, t);
+            yield return null;
+        }
+        isMoving = false;
     }
 }
