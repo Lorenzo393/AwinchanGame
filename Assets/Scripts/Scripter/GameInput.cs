@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameInput : MonoBehaviour
 {
+    // Hago que solo pueda haber una instancia del game input
+    public static GameInput Instance {get; private set;}
     // Se tiene que llamar igual que el script generado por el input system.
     private InputSystem inputSystem;
     // Evento correr iniciado
@@ -15,6 +17,8 @@ public class GameInput : MonoBehaviour
     // Evento linterna
     public event EventHandler OnFlashlightAction;
     private void Awake(){
+        // Inicializo el singleton
+        Instance = this;
         // Inicializo el script
         inputSystem = new InputSystem();
 
@@ -52,5 +56,11 @@ public class GameInput : MonoBehaviour
     }
     private void Flashlight_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnFlashlightAction?.Invoke(this, EventArgs.Empty);
+    }
+    public void BlockPlayerInput(){
+        inputSystem.Player.Disable();
+    }
+    public void EnablePlayerInput(){
+        inputSystem.Player.Enable();
     }
 }

@@ -6,8 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     // Character controller
     private CharacterController characterController;
-    // Referencia al objeto que tiene el script gameInput
-    [SerializeField] private GameInput gameInput;
     // Velocidad a la que camina el personaje
     [SerializeField] private float walkingSpeed = 4.0f;
     // Velocidad a la que corre el personaje
@@ -37,16 +35,16 @@ public class PlayerController : MonoBehaviour
         currentSpeed = walkingSpeed;
 
         // Evento correr iniciado
-        gameInput.OnSprintActionStarted += GameInput_OnSprintActionStarted;
+        GameInput.Instance.OnSprintActionStarted += GameInput_OnSprintActionStarted;
         // Evento correr terminado
-        gameInput.OnSprintActionCanceled += GameInput_OnSprintActionCanceled;
+        GameInput.Instance.OnSprintActionCanceled += GameInput_OnSprintActionCanceled;
     }
     private void Update(){
         // Mueve al personaje
         HandleMovement();
     }
     private void HandleMovement(){
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
         Vector3 playerMovement = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
         playerMovement.y = 0f;
 

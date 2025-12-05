@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    // Referencia al objeto que tiene el script gameInput
-    [SerializeField] private GameInput gameInput;
     // Referencia de la camara para ver hacia donde esta viendo el jugador
     [SerializeField] private new Transform camera;
     // Capa en las que puede interactuar el jugador
@@ -15,7 +13,7 @@ public class PlayerInteract : MonoBehaviour
 
     private void Start(){
         // Evento interaccion
-        gameInput.OnInteractAction += GameInput_OnInteractAction;
+        GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
     }
     private void PlayerInteraction(){
         float interactDistance = 3.0f;
