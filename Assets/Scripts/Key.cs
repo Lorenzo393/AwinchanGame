@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class Key : MonoBehaviour, IInteractable
 {
     [SerializeField] private KeyTipe keyTipe;   
     public enum KeyTipe{
@@ -11,5 +12,10 @@ public class Key : MonoBehaviour
         Principals,
         Library,
         Outside,
+    }
+    public void Interact(){
+        PlayerInventory.Instance.AddKey(keyTipe);
+        Debug.Log("Grab: " + keyTipe);
+        Destroy(gameObject);
     }
 }

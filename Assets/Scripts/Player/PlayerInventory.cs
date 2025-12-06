@@ -3,27 +3,53 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    // Hago singleton al inventario del jugador
+    public static PlayerInventory Instance {get; private set;}
     // Lista de tipos de llaves
     [SerializeField] private List<Key.KeyTipe> keysList;
     private Key.KeyTipe currentKey;
+    private int listIndex = 0;
+
     private void GameInput_OnInventoryLeft(object sender, System.EventArgs e){
-        Debug.Log("Inventario L");
-        Debug.Log("Current key: " + currentKey);
+        if((listIndex - 1) < 0){
+            listIndex = (keysList.Count - 1);
+        } else{
+            listIndex--;
+        }
+        currentKey = keysList[listIndex];
+        Debug.Log("Left - Current key: " + currentKey);
     }
     private void GameInput_OnInventoryRight(object sender, System.EventArgs e){
-        Debug.Log("Inventario R");
-        Debug.Log("Current key: " + currentKey);
+        if((listIndex + 1) > (keysList.Count - 1)){
+            listIndex = 0;
+        } else{
+            listIndex++;
+        }
+        currentKey = keysList[listIndex];
+        Debug.Log("Right - Current key: " + currentKey);
     }
-    private void Start(){
+    private void Awake(){
+        // Inicializo la instancia del objeto jugador
+        Instance = this;
         // Inicializo el inventario
         keysList = new List<Key.KeyTipe>();
-        keysList.Add(Key.KeyTipe.Null);
+        AddKey(Key.KeyTipe.Null);
         // Inicializo la llave actual
         currentKey = Key.KeyTipe.Null;
+    }
+    private void Start(){
         // Me suscribo al evento inventario izquierda
         GameInput.Instance.OnInventoryLeft += GameInput_OnInventoryLeft;
         // Me suscribo al evento inventario izquierda
         GameInput.Instance.OnInventoryRight += GameInput_OnInventoryRight;
     }
-
+    public void AddKey(Key.KeyTipe key){
+        keysList.Add(key);
+    }
+    public void RemoveKey(Key.KeyTipe key){
+        keysList.Remove(key);
+    }
+    public bool ContainsKey(Key.KeyTipe key){
+        return keysList.Contains(key);
+    }
 }
