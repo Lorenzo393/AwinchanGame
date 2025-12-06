@@ -15,7 +15,6 @@ public class Key : MonoBehaviour, IInteractable
     }
     public void Interact(){
         PlayerInventory.Instance.AddKey(keyTipe);
-        Debug.Log("Grab: " + keyTipe);
         Destroy(gameObject);
     }
 }

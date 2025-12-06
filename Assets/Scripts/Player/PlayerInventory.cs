@@ -7,7 +7,7 @@ public class PlayerInventory : MonoBehaviour
     public static PlayerInventory Instance {get; private set;}
     // Lista de tipos de llaves
     [SerializeField] private List<Key.KeyTipe> keysList;
-    private Key.KeyTipe currentKey;
+    public Key.KeyTipe currentKey;
     private int listIndex = 0;
 
     private void GameInput_OnInventoryLeft(object sender, System.EventArgs e){
@@ -17,7 +17,7 @@ public class PlayerInventory : MonoBehaviour
             listIndex--;
         }
         currentKey = keysList[listIndex];
-        Debug.Log("Left - Current key: " + currentKey);
+        Debug.Log("Left Inventory");
     }
     private void GameInput_OnInventoryRight(object sender, System.EventArgs e){
         if((listIndex + 1) > (keysList.Count - 1)){
@@ -26,7 +26,7 @@ public class PlayerInventory : MonoBehaviour
             listIndex++;
         }
         currentKey = keysList[listIndex];
-        Debug.Log("Right - Current key: " + currentKey);
+        Debug.Log("Right Inventory");
     }
     private void Awake(){
         // Inicializo la instancia del objeto jugador
@@ -45,6 +45,7 @@ public class PlayerInventory : MonoBehaviour
     }
     public void AddKey(Key.KeyTipe key){
         keysList.Add(key);
+        Debug.Log("Grab: " + key);
     }
     public void RemoveKey(Key.KeyTipe key){
         keysList.Remove(key);
