@@ -7,6 +7,6 @@ public class PickUpPhone : MonoBehaviour, IInteractable
     public void Interact()
     {
         OnPickUpPhone?.Invoke(this, EventArgs.Empty);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

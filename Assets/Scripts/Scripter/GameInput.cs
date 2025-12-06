@@ -16,6 +16,10 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInteractAction;
     // Evento linterna
     public event EventHandler OnFlashlightAction;
+    // Evento inventario izquierda
+    public event EventHandler OnInventoryLeft;
+    // Evento inventario derecha
+    public event EventHandler OnInventoryRight;
     private void Awake(){
         // Inicializo el singleton
         Instance = this;
@@ -35,6 +39,11 @@ public class GameInput : MonoBehaviour
 
         // Seteo evento linterna
         inputSystem.Player.Flashlight.performed += Flashlight_performed;
+
+        // Seteo evento inventario mover izquierda
+        inputSystem.Player.InventoryL.performed += InventoryL_performed;
+        // Seteo evento inventario mover derecha
+        inputSystem.Player.InventoryR.performed += InventoryR_performed;
     }
 
     public Vector2 GetMovementVectorNormalized(){
@@ -56,6 +65,12 @@ public class GameInput : MonoBehaviour
     }
     private void Flashlight_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnFlashlightAction?.Invoke(this, EventArgs.Empty);
+    }
+    private void InventoryL_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnInventoryLeft?.Invoke(this, EventArgs.Empty);
+    }
+    private void InventoryR_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnInventoryRight?.Invoke(this, EventArgs.Empty);
     }
     public void BlockPlayerInput(){
         inputSystem.Player.Disable();

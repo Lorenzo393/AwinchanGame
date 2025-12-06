@@ -129,13 +129,22 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Inventory"",
-                    ""type"": ""Value"",
-                    ""id"": ""3dee08b7-d6fa-404c-9278-4b34633be40c"",
+                    ""name"": ""InventoryL"",
+                    ""type"": ""Button"",
+                    ""id"": ""690dd935-7d9e-427d-8b1e-9ad4e1d36423"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryR"",
+                    ""type"": ""Button"",
+                    ""id"": ""660a1b6a-cf56-4516-aede-324f539a4473"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -272,70 +281,48 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""67edd6b4-2921-46cc-8fb1-bc918dd511ae"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Inventory"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""15c13e0b-2dc4-454e-8844-3520872eb3da"",
+                    ""name"": """",
+                    ""id"": ""97a3a2b2-595b-4621-a950-80ccc1c63878"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Inventory"",
+                    ""action"": ""InventoryL"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""896590cb-c7d6-4026-96d0-a470951bd977"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""c6a03123-f4b3-42d0-b179-988d3ce4d6ba"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Inventory"",
-                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""1ff1fdff-c471-4287-a5e1-64508211e704"",
+                    ""name"": """",
+                    ""id"": ""33f79fe8-010c-4d1d-b8bb-765e79757639"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Inventory"",
+                    ""action"": ""InventoryL"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""0c57c192-2b32-48ac-b4d2-4d39224f0b41"",
+                    ""name"": """",
+                    ""id"": ""737b6b02-5a5e-41d0-9da9-12e05f9992ec"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryR"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65158e5a-d2b8-4b53-b9eb-c970664d037b"",
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Inventory"",
+                    ""action"": ""InventoryR"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -409,7 +396,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Flashlight = m_Player.FindAction("Flashlight", throwIfNotFound: true);
-        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+        m_Player_InventoryL = m_Player.FindAction("InventoryL", throwIfNotFound: true);
+        m_Player_InventoryR = m_Player.FindAction("InventoryR", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -494,7 +482,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Flashlight;
-    private readonly InputAction m_Player_Inventory;
+    private readonly InputAction m_Player_InventoryL;
+    private readonly InputAction m_Player_InventoryR;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -523,9 +512,13 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Flashlight => m_Wrapper.m_Player_Flashlight;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Inventory".
+        /// Provides access to the underlying input action "Player/InventoryL".
         /// </summary>
-        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
+        public InputAction @InventoryL => m_Wrapper.m_Player_InventoryL;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/InventoryR".
+        /// </summary>
+        public InputAction @InventoryR => m_Wrapper.m_Player_InventoryR;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -564,9 +557,12 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Flashlight.started += instance.OnFlashlight;
             @Flashlight.performed += instance.OnFlashlight;
             @Flashlight.canceled += instance.OnFlashlight;
-            @Inventory.started += instance.OnInventory;
-            @Inventory.performed += instance.OnInventory;
-            @Inventory.canceled += instance.OnInventory;
+            @InventoryL.started += instance.OnInventoryL;
+            @InventoryL.performed += instance.OnInventoryL;
+            @InventoryL.canceled += instance.OnInventoryL;
+            @InventoryR.started += instance.OnInventoryR;
+            @InventoryR.performed += instance.OnInventoryR;
+            @InventoryR.canceled += instance.OnInventoryR;
         }
 
         /// <summary>
@@ -590,9 +586,12 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Flashlight.started -= instance.OnFlashlight;
             @Flashlight.performed -= instance.OnFlashlight;
             @Flashlight.canceled -= instance.OnFlashlight;
-            @Inventory.started -= instance.OnInventory;
-            @Inventory.performed -= instance.OnInventory;
-            @Inventory.canceled -= instance.OnInventory;
+            @InventoryL.started -= instance.OnInventoryL;
+            @InventoryL.performed -= instance.OnInventoryL;
+            @InventoryL.canceled -= instance.OnInventoryL;
+            @InventoryR.started -= instance.OnInventoryR;
+            @InventoryR.performed -= instance.OnInventoryR;
+            @InventoryR.canceled -= instance.OnInventoryR;
         }
 
         /// <summary>
@@ -727,11 +726,18 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFlashlight(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "InventoryL" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInventory(InputAction.CallbackContext context);
+        void OnInventoryL(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryR" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryR(InputAction.CallbackContext context);
     }
 }
