@@ -2,14 +2,16 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 
-public class DoorAnimation : MonoBehaviour, IInteractable
+public class DoorAnimation : MonoBehaviour
 {
+    [SerializeField] private DoorHandler doorHandler;
     private Quaternion closedDoorRot;
     private Quaternion openedDoorRot;
     private float doorSpeed = 2f;
     private bool isOpen = false;
     private bool isMoving = false;
-    public void Interact(){
+
+    private void DoorHandler_OnDoorInteract(object sender, System.EventArgs e){
         if (!isMoving){
             if(isOpen == false){
                 StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
@@ -21,6 +23,9 @@ public class DoorAnimation : MonoBehaviour, IInteractable
         }
     }
     private void Start(){
+        // Evento interaccion con la puerta desbloqueada
+        doorHandler.OnDoorInteract += DoorHandler_OnDoorInteract;
+        // Seteo basico de la puerta
         closedDoorRot = transform.localRotation;
         openedDoorRot = Quaternion.Euler(transform.localRotation.x, (transform.localRotation.y -90), transform.localRotation.z);
         transform.localRotation = closedDoorRot;

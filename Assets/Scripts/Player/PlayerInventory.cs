@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,9 +6,11 @@ public class PlayerInventory : MonoBehaviour
 {
     // Hago singleton al inventario del jugador
     public static PlayerInventory Instance {get; private set;}
+    // Evento para coordinar valor de llave con el ui
+    public event EventHandler OnCurrentKeyModification;
     // Lista de tipos de llaves
     [SerializeField] private List<Key.KeyTipe> keysList;
-    public Key.KeyTipe currentKey;
+    private Key.KeyTipe currentKey;
     private int listIndex = 0;
 
     private void GameInput_OnInventoryLeft(object sender, System.EventArgs e){
@@ -17,6 +20,7 @@ public class PlayerInventory : MonoBehaviour
             listIndex--;
         }
         currentKey = keysList[listIndex];
+        OnCurrentKeyModification?.Invoke(this, EventArgs.Empty);
         Debug.Log("Left Inventory");
     }
     private void GameInput_OnInventoryRight(object sender, System.EventArgs e){
@@ -26,6 +30,7 @@ public class PlayerInventory : MonoBehaviour
             listIndex++;
         }
         currentKey = keysList[listIndex];
+        OnCurrentKeyModification?.Invoke(this, EventArgs.Empty);
         Debug.Log("Right Inventory");
     }
     private void Awake(){
@@ -49,8 +54,11 @@ public class PlayerInventory : MonoBehaviour
     }
     public void RemoveKey(Key.KeyTipe key){
         keysList.Remove(key);
+        listIndex = 0;
+        currentKey = keysList[listIndex];
+        OnCurrentKeyModification?.Invoke(this,EventArgs.Empty);
     }
-    public bool ContainsKey(Key.KeyTipe key){
-        return keysList.Contains(key);
+    public Key.KeyTipe GetCurrentKey(){
+        return currentKey;
     }
 }
