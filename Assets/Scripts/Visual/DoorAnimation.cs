@@ -13,10 +13,10 @@ public class DoorAnimation : MonoBehaviour
 
     private void DoorHandler_OnDoorInteract(object sender, System.EventArgs e){
         if (!isMoving){
-            if(isOpen == false){
+            if(!isOpen){
                 StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
                 isOpen = true;
-            } else if(isOpen == true){
+            } else {
                 StartCoroutine(OpenCloseDoor(openedDoorRot, closedDoorRot));
                 isOpen = false;
             }

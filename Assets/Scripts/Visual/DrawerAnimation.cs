@@ -11,10 +11,10 @@ public class DrawerAnimation : MonoBehaviour, IInteractable
     private bool isMoving = false;
     public void Interact(){
         if (!isMoving){
-            if(isOpen == false){
+            if(!isOpen){
                 StartCoroutine(OpenCloseDrawer(closedPos, openedPos));
                 isOpen = true;
-            } else if(isOpen == true){
+            } else {
                 StartCoroutine(OpenCloseDrawer(openedPos, closedPos));
                 isOpen = false;
             }

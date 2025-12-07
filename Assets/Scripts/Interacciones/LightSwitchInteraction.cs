@@ -14,9 +14,9 @@ public class LightSwitchInteraction : MonoBehaviour, IInteractable
     private bool lightState = false;
     public void Interact()
     {
-        if(lightState == false){
+        if(!lightState){
             lightState = true;
-        } else if(lightState == true){
+        } else {
             lightState = false;
         }
         OnClickSwitch?.Invoke(this, new OnClickSwitchEventArgs{lightState = lightState});

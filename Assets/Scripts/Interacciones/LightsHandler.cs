@@ -16,12 +16,12 @@ public class LightsHandler : MonoBehaviour
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }
     private void LightsManager(bool lightState){
-        if(lightState == true){
+        if(lightState){
             foreach (Transform light in lightList){
                 EnableEmission(light);
                 EnableDisableLight(light, lightState);
             }
-        } else if (lightState == false){
+        } else {
             foreach (Transform light in lightList){
                 DisableEmission(light);
                 EnableDisableLight(light, lightState);
