@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 14b77564700f7d349ae205174a4c84e5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297950
+  packageName: Simple Bench
+  packageVersion: 1.0
+  assetPath: Assets/MarioParadiso/Bench/Built-in/Materials/Bench.mat
+  uploadId: 697187
