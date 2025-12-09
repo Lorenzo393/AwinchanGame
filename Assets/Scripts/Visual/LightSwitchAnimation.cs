@@ -10,7 +10,7 @@ public class LightSwitchAnimation : MonoBehaviour
     private void LightSwitchInteraction_OnClickSwitch(object sender, LightSwitchInteraction.OnClickSwitchEventArgs e){
         Animation(e.lightState);
     }
-    private void Start(){
+    private void Awake(){
         LightSwitchInteraction lightSwitchInteraction = GetComponent<LightSwitchInteraction>();
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }

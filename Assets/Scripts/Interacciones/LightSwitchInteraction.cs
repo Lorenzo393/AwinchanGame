@@ -11,7 +11,7 @@ public class LightSwitchInteraction : MonoBehaviour, IInteractable
         public bool lightState;
     }
     // Encendido/apagado de las luces
-    [SerializeField] private bool lightState = false;
+    [SerializeField] private bool lightState;
     private void Start(){
         OnClickSwitch?.Invoke(this, new OnClickSwitchEventArgs{lightState = lightState});
     }
