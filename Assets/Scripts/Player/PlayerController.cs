@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using Unity.IntegerTime;
 using UnityEngine;
+using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
+    // Singleton
+    public static PlayerController Instance{get; private set;}
     // Character controller
     private CharacterController characterController;
     // Velocidad a la que camina el personaje
@@ -12,8 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float runningSpeed = 8.0f;
     // Referencia de la camara para ver hacia donde esta viendo el jugador
     [SerializeField] private new Transform camera;
-
-
     // Velocidad actual del jugador
     private float currentSpeed;
     // Fuerza de la gravedad/ caida del personaje
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
         currentSpeed = walkingSpeed;
     }
     private void Start(){
+        // Inicializo la instancia
+        Instance = this;
         // Inicializa el character controller
         characterController = GetComponent<CharacterController>();
 
@@ -60,5 +63,9 @@ public class PlayerController : MonoBehaviour
     private float GetCurrentSpeed(){
         return currentSpeed;
     }
-
+    public void TeleportPlayer(Vector3 newPosition){
+        characterController.enabled = false;
+        transform.position = newPosition;
+        characterController.enabled = true;
+    }
 }
