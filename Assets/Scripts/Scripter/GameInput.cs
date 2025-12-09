@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class GameInput : MonoBehaviour
 {
     // Hago que solo pueda haber una instancia del game input
     public static GameInput Instance {get; private set;}
+    // Referencia al input de la camara del jugador
+    [SerializeField] private CinemachineInputAxisController cinemachineInputAxisController;
     // Se tiene que llamar igual que el script generado por el input system.
     private InputSystem inputSystem;
     // Evento correr iniciado
@@ -45,7 +48,6 @@ public class GameInput : MonoBehaviour
         // Seteo evento inventario mover derecha
         inputSystem.Player.InventoryR.performed += InventoryR_performed;
     }
-
     public Vector2 GetMovementVectorNormalized(){
         // Lee el valor de Vector2 del action map move
         Vector2 inputVectorMovement = inputSystem.Player.Move.ReadValue<Vector2>();
@@ -53,7 +55,6 @@ public class GameInput : MonoBehaviour
         inputVectorMovement = inputVectorMovement.normalized;
         return inputVectorMovement;
     }
-
     private void Sprint_started(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnSprintActionStarted?.Invoke(this, EventArgs.Empty);
     }
@@ -77,5 +78,11 @@ public class GameInput : MonoBehaviour
     }
     public void EnablePlayerInput(){
         inputSystem.Player.Enable();
+    }
+    public void BlockCameraInput(){
+        cinemachineInputAxisController.enabled = false;
+    }
+    public void EnableCameraInput(){
+        cinemachineInputAxisController.enabled = true;
     }
 }

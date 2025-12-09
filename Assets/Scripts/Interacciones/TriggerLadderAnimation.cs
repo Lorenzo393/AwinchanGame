@@ -14,7 +14,9 @@ public class TriggerLadderAnimation : MonoBehaviour, IInteractable
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
         yield return new WaitForSecondsRealtime(2);
         GameInput.Instance.BlockPlayerInput();
+        GameInput.Instance.BlockCameraInput();
         yield return new WaitForSecondsRealtime(2);
         GameInput.Instance.EnablePlayerInput();
+        GameInput.Instance.EnableCameraInput();
     }
 }

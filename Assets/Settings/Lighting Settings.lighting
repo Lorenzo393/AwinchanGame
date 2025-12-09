@@ -25,12 +25,12 @@ LightingSettings:
   m_AO: 1
   m_AOMaxDistance: 1
   m_CompAOExponent: 1
-  m_CompAOExponentDirect: 0
+  m_CompAOExponentDirect: 0.5
   m_ExtractAO: 0
   m_MixedBakeMode: 2
   m_LightmapsBakeMode: 1
   m_FilterMode: 1
-  m_LightmapParameters: {fileID: 15200, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightmapParameters: {fileID: 111300000, guid: a65fd9c3c4eed134fb0f398463849763, type: 2}
   m_ExportTrainingData: 0
   m_EnableWorkerProcessBaking: 1
   m_TrainingDataDestination: TrainingData
@@ -40,7 +40,7 @@ LightingSettings:
   m_PVRCulling: 1
   m_PVRSampling: 1
   m_PVRDirectSampleCount: 32
-  m_PVRSampleCount: 512
+  m_PVRSampleCount: 256
   m_PVREnvironmentSampleCount: 256
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
