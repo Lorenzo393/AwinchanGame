@@ -28,7 +28,9 @@ public class LadderAnimation : MonoBehaviour
         GameInput.Instance.BlockCameraInput();
         PlayerController.Instance.TeleportPlayer(playerNewTransform.position);
 
-        Destroy(ladderFloor.gameObject);
+        if(ladderFloor != null) {
+            Destroy(ladderFloor.gameObject);
+        }
         ladderWall.SetActive(true);
 
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
