@@ -21,18 +21,31 @@ public class PlayerController : MonoBehaviour
     private const float gravityForce = -20.0f;
     // Fuerza de empuje normal/ fuerza que se aplica con el personaje tocando el suelo 
     private const float groundStickForce = -2.0f;
+
+    // STAMINA
+    [SerializeField] private float maxStamina = 5f;
+    [SerializeField] private float staminaDrain = 1f;
+    [SerializeField] private float staminaRegen = 0.5f;
+    [SerializeField] private float staminaSprintThreshold = 1f;
+    private float currentStamina;
+    private bool blockSprint = false;
+    private bool isSprinting = false;
     
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e){
-        currentSpeed = runningSpeed;
+        isSprinting = true;
     }
     private void GameInput_OnSprintActionCanceled(object sender, System.EventArgs e){
-        currentSpeed = walkingSpeed;
+        isSprinting = false;
     }
     private void Start(){
         // Inicializo la instancia
         Instance = this;
+
         // Inicializa el character controller
         characterController = GetComponent<CharacterController>();
+
+        // Inicializo la estamina
+        currentStamina = maxStamina;
 
         // Inicializo la velocidad de movimiento actual
         currentSpeed = walkingSpeed;
@@ -45,14 +58,28 @@ public class PlayerController : MonoBehaviour
     private void Update(){
         // Mueve al personaje
         HandleMovement();
+        StaminaBar.Instance.UpdateStamina(currentStamina, maxStamina);
     }
     private void HandleMovement(){
         Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
         Vector3 playerMovement = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
         playerMovement.y = 0f;
 
+        if(currentStamina <= 0f) blockSprint = true;
+        if(currentStamina >= staminaSprintThreshold) blockSprint = false;
+
+
+        // Si esta corriendo y tiene estamina corre y la consume, sino la regenera
+        if ((isSprinting) && (currentStamina > 0f) && (!blockSprint)){
+            currentSpeed = runningSpeed;
+            ConsumeStamina();
+        } else {
+            currentSpeed = walkingSpeed;
+            RegenerateStamina();
+        }
+
         // Multiplico la direccion de movimiento con la velocidad actual
-        playerMovement *= GetCurrentSpeed();
+        playerMovement *= currentSpeed;
 
         // Aplico gravedad sin que sea multiplicada por la velocidad del jugador
         playerMovement.y = characterController.isGrounded? groundStickForce : gravityForce;
@@ -60,8 +87,14 @@ public class PlayerController : MonoBehaviour
         // Mueve al personaje multiplicando su movimiento por deltaTime
         characterController.Move(playerMovement * Time.deltaTime);
     }
-    private float GetCurrentSpeed(){
-        return currentSpeed;
+    private void ConsumeStamina(){
+        currentStamina -= staminaDrain * Time.deltaTime;
+        if (currentStamina < 0f) currentStamina = 0f;
+    }
+
+    private void RegenerateStamina(){
+        currentStamina += staminaRegen * Time.deltaTime;
+        if (currentStamina > maxStamina) currentStamina = maxStamina;
     }
     public void TeleportPlayer(Vector3 newPosition){
         characterController.enabled = false;
