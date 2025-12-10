@@ -12,11 +12,7 @@ public class DoorHandler : MonoBehaviour, IInteractable
                 unlockedDoor = true;
                 PlayerInventory.Instance.RemoveKey(unlockKey);
                 OnDoorInteract?.Invoke(this, EventArgs.Empty);
-            } else {
-                Debug.Log("LLave incorrecta"); 
-            } 
-        } else{
-            OnDoorInteract?.Invoke(this, EventArgs.Empty);
-        }
+            } else Debug.Log("LLave incorrecta"); 
+        } else OnDoorInteract?.Invoke(this, EventArgs.Empty);
     }
 }

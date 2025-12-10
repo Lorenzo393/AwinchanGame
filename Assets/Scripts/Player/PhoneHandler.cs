@@ -3,7 +3,8 @@ using UnityEngine;
 public class PhoneHandler : MonoBehaviour
 {
     /*
-    // Creo que no es del todo correcto este enfoque pero como solo va a haber un objeto con el comportamiento de la linterna del telefono lo hago de esta manera
+    // Creo que no es del todo correcto este enfoque pero como solo va a haber un objeto con el comportamiento de la linterna del telefono 
+    // lo hago de esta manera.
     // Voy a tener que usar un enfoque diferente cuando tenga que programar que el personaje pueda agarrar llaves
     */
     // Referencia al telefono del jugador
@@ -23,12 +24,7 @@ public class PhoneHandler : MonoBehaviour
     private void GameInput_OnFlashlightAction(object sender, System.EventArgs e){
         if (phoneIsPickedUp)
         {
-            if(phoneLight == false){
-            phoneLight = true;
-            }
-            else if(phoneLight == true){
-            phoneLight = false;
-            }
+            phoneLight = !phoneLight;
             playerPhone.SetActive(phoneLight);
         }
     }

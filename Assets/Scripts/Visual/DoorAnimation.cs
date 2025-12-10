@@ -13,18 +13,16 @@ public class DoorAnimation : MonoBehaviour
 
     private void DoorHandler_OnDoorInteract(object sender, System.EventArgs e){
         if (!isMoving){
-            if(!isOpen){
-                StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
-                isOpen = true;
-            } else {
-                StartCoroutine(OpenCloseDoor(openedDoorRot, closedDoorRot));
-                isOpen = false;
-            }
+            if(!isOpen) StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
+            else StartCoroutine(OpenCloseDoor(openedDoorRot, closedDoorRot));
+
+            isOpen = !isOpen;
         }
     }
     private void Start(){
         // Evento interaccion con la puerta desbloqueada
         doorHandler.OnDoorInteract += DoorHandler_OnDoorInteract;
+        
         // Seteo basico de la puerta
         closedDoorRot = transform.localRotation;
         openedDoorRot = Quaternion.Euler(transform.localRotation.x, (transform.localRotation.y -90), transform.localRotation.z);

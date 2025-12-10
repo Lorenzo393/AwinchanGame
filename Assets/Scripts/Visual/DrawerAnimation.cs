@@ -11,17 +11,15 @@ public class DrawerAnimation : MonoBehaviour, IInteractable
     private bool isMoving = false;
     public void Interact(){
         if (!isMoving){
-            if(!isOpen){
-                StartCoroutine(OpenCloseDrawer(closedPos, openedPos));
-                isOpen = true;
-            } else {
-                StartCoroutine(OpenCloseDrawer(openedPos, closedPos));
-                isOpen = false;
-            }
+            if(!isOpen) StartCoroutine(OpenCloseDrawer(closedPos, openedPos));
+            else StartCoroutine(OpenCloseDrawer(openedPos, closedPos));
+            
+            isOpen = !isOpen;
         }
         
     }
     private void Start(){
+        // Inicializacion de posiciones
         closedPos = transform.localPosition;
         openedPos = new Vector3(transform.localPosition.x, transform.localPosition.y, (transform.localPosition.z + openedLength));
         transform.localPosition = closedPos;

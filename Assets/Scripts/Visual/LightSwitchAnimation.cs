@@ -15,12 +15,8 @@ public class LightSwitchAnimation : MonoBehaviour
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }
     private void Animation(bool lightState){
-        if(lightState == false){
-            lightSwitch.localRotation = Quaternion.Euler(0, 0, 0);
-        }
-        if(lightState == true){
-            lightSwitch.localRotation = Quaternion.Euler(15, 0, 0);
-        }
+        if(!lightState) lightSwitch.localRotation = Quaternion.Euler(0, 0, 0);
+        else lightSwitch.localRotation = Quaternion.Euler(15, 0, 0);
     }
 
 }

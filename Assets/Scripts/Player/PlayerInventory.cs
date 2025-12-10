@@ -56,6 +56,7 @@ public class PlayerInventory : MonoBehaviour
         keysList.Remove(key);
         listIndex = 0;
         currentKey = keysList[listIndex];
+        
         OnCurrentKeyModification?.Invoke(this,EventArgs.Empty);
     }
     public Key.KeyTipe GetCurrentKey(){

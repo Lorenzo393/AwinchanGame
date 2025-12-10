@@ -7,17 +7,14 @@ public class WindowAnimation : MonoBehaviour, IInteractable
     private Vector3 finalPos;
     private float animationSpeed = 1.0f;
     private bool isMoving = false;
-    private bool isOpen = false;
+    [SerializeField] private bool isOpen = false;
 
     public void Interact(){
         if (!isMoving){
-            if (!isOpen){
-                isOpen = true;
-                StartCoroutine(OpenCloseWindow(initialPos, finalPos));
-            } else {
-                isOpen = false;
-                StartCoroutine(OpenCloseWindow(finalPos, initialPos));
-            }
+            if (!isOpen) StartCoroutine(OpenCloseWindow(initialPos, finalPos));
+            else StartCoroutine(OpenCloseWindow(finalPos, initialPos));
+            
+            isOpen = !isOpen;
         }
     }
     private void Start(){
