@@ -28,9 +28,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaRegen = 0.5f;
     [SerializeField] private float staminaSprintThreshold = 1f;
     private float currentStamina;
-    private bool blockSprint = false;
-    private bool isSprinting = false;
+    private bool blockSprint;
+    private bool isSprinting;
+    private bool isRunningFoward;
+    private bool canSprint;
+
+    // SMOTH
+    [SerializeField] private float velocityRef = 0f;
+    [SerializeField] private float smoothTime = 0.15f;
+    private float targetSpeed;
     
+
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e){
         isSprinting = true;
     }
@@ -65,18 +73,23 @@ public class PlayerController : MonoBehaviour
         Vector3 playerMovement = (camera.forward * inputVector.y) + (camera.right * inputVector.x);
         playerMovement.y = 0f;
 
+        // Casos en que puede correr
+        isRunningFoward = inputVector.y > 0f;
         if(currentStamina <= 0f) blockSprint = true;
         if(currentStamina >= staminaSprintThreshold) blockSprint = false;
 
+        canSprint = isSprinting && (currentStamina > 0f) && (!blockSprint) && isRunningFoward;
 
         // Si esta corriendo y tiene estamina corre y la consume, sino la regenera
-        if ((isSprinting) && (currentStamina > 0f) && (!blockSprint)){
-            currentSpeed = runningSpeed;
+        if (canSprint){
+            targetSpeed = runningSpeed;
             ConsumeStamina();
         } else {
-            currentSpeed = walkingSpeed;
+            targetSpeed = walkingSpeed;
             RegenerateStamina();
         }
+
+        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref velocityRef, smoothTime);
 
         // Multiplico la direccion de movimiento con la velocidad actual
         playerMovement *= currentSpeed;
@@ -87,11 +100,13 @@ public class PlayerController : MonoBehaviour
         // Mueve al personaje multiplicando su movimiento por deltaTime
         characterController.Move(playerMovement * Time.deltaTime);
     }
+    private bool CanSprint(){
+        return false;
+    }
     private void ConsumeStamina(){
         currentStamina -= staminaDrain * Time.deltaTime;
         if (currentStamina < 0f) currentStamina = 0f;
     }
-
     private void RegenerateStamina(){
         currentStamina += staminaRegen * Time.deltaTime;
         if (currentStamina > maxStamina) currentStamina = maxStamina;
