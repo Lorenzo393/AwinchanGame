@@ -34,9 +34,9 @@ public class PlayerController : MonoBehaviour
     private bool canSprint;
 
     // SMOTH
-    [SerializeField] private float velocityRef = 0f;
-    [SerializeField] private float smoothTime = 0.15f;
-    private float targetSpeed;
+    [SerializeField] private float movementSmoothTime = 0.1f;
+    private Vector3 smoothMovement;
+    private Vector3 smoothMovementVelocity; 
     
 
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e){
@@ -82,23 +82,23 @@ public class PlayerController : MonoBehaviour
 
         // Si esta corriendo y tiene estamina corre y la consume, sino la regenera
         if (canSprint){
-            targetSpeed = runningSpeed;
+            currentSpeed = runningSpeed;
             ConsumeStamina();
         } else {
-            targetSpeed = walkingSpeed;
+            currentSpeed = walkingSpeed;
             RegenerateStamina();
         }
 
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref velocityRef, smoothTime);
+        Vector3 targetMovement = playerMovement * currentSpeed;
 
-        // Multiplico la direccion de movimiento con la velocidad actual
-        playerMovement *= currentSpeed;
+        // Suaviza el movimiento en TODAS las direcciones
+        smoothMovement = Vector3.SmoothDamp(smoothMovement, targetMovement, ref smoothMovementVelocity, movementSmoothTime);
 
         // Aplico gravedad sin que sea multiplicada por la velocidad del jugador
-        playerMovement.y = characterController.isGrounded? groundStickForce : gravityForce;
+        smoothMovement.y = characterController.isGrounded? groundStickForce : gravityForce;
 
         // Mueve al personaje multiplicando su movimiento por deltaTime
-        characterController.Move(playerMovement * Time.deltaTime);
+        characterController.Move(smoothMovement * Time.deltaTime);
     }
     private bool CanSprint(){
         return false;
