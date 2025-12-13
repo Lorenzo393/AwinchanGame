@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     private bool blockSprint;
     private bool isSprinting;
     private bool isRunningFoward;
-    private bool canSprint;
 
     // SMOTH
     [SerializeField] private float movementSmoothTime = 0.1f;
@@ -78,10 +77,8 @@ public class PlayerController : MonoBehaviour
         if(currentStamina <= 0f) blockSprint = true;
         if(currentStamina >= staminaSprintThreshold) blockSprint = false;
 
-        canSprint = isSprinting && (currentStamina > 0f) && (!blockSprint) && isRunningFoward;
-
         // Si esta corriendo y tiene estamina corre y la consume, sino la regenera
-        if (canSprint){
+        if (isSprinting && (currentStamina > 0f) && (!blockSprint) && isRunningFoward){
             currentSpeed = runningSpeed;
             ConsumeStamina();
         } else {
@@ -100,9 +97,7 @@ public class PlayerController : MonoBehaviour
         // Mueve al personaje multiplicando su movimiento por deltaTime
         characterController.Move(smoothMovement * Time.deltaTime);
     }
-    private bool CanSprint(){
-        return false;
-    }
+    
     private void ConsumeStamina(){
         currentStamina -= staminaDrain * Time.deltaTime;
         if (currentStamina < 0f) currentStamina = 0f;
