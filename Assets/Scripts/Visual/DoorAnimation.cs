@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DoorAnimation : MonoBehaviour
 {
-    [SerializeField] private DoorHandler doorHandler;
+    private DoorHandler doorHandler;
     private Quaternion closedDoorRot;
     private Quaternion openedDoorRot;
     private float doorSpeed = 2f;
@@ -20,6 +20,8 @@ public class DoorAnimation : MonoBehaviour
         }
     }
     private void Start(){
+        doorHandler = GetComponent<DoorHandler>();
+
         // Evento interaccion con la puerta desbloqueada
         doorHandler.OnDoorInteract += DoorHandler_OnDoorInteract;
         
