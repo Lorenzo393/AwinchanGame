@@ -27,7 +27,7 @@ public class DoorAnimation : MonoBehaviour
         
         // Seteo basico de la puerta
         closedDoorRot = transform.localRotation;
-        openedDoorRot = Quaternion.Euler(transform.localRotation.x, (transform.localRotation.y -90), transform.localRotation.z);
+        openedDoorRot = Quaternion.Euler(transform.localRotation.x, (transform.localRotation.y - 90), transform.localRotation.z);
         transform.localRotation = closedDoorRot;
     }
     IEnumerator OpenCloseDoor(Quaternion inicialRotation, Quaternion finalRotation){

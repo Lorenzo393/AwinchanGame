@@ -20,12 +20,13 @@ public class LadderAnimation : MonoBehaviour
         
     }
     IEnumerator FadeInOut(){
+        GameInput.Instance.BlockPlayerInput();
+        GameInput.Instance.BlockCameraInput();
+        
         // Fade In + Cambio de escaleras
         yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
         yield return new WaitForSecondsRealtime(2);
 
-        GameInput.Instance.BlockPlayerInput();
-        GameInput.Instance.BlockCameraInput();
         PlayerController.Instance.TeleportPlayer(playerNewTransform.position);
 
         if(ladderFloor != null) {
