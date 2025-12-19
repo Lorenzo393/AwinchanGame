@@ -6,7 +6,6 @@ public class ElectricPanelAnimation : MonoBehaviour
     [SerializeField] private LightSwitchInteraction lightSwitchInteraction;
     private Quaternion initialRotation;
     private Quaternion finalRotation;
-    private float rotationAngle = 135f;
     private float animationSpeed = 4f;
     private bool isMoving;
 
