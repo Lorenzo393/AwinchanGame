@@ -16,15 +16,15 @@ public class LightsHandler : MonoBehaviour
         lightSwitchInteraction.OnClickSwitch += LightSwitchInteraction_OnClickSwitch;
     }
     private void LightsManager(bool lightState){
-        if(lightState){
-            foreach (Transform light in lightList){
+        if (lightState){
+            foreach(Transform light in lightList){
                 EnableEmission(light);
                 EnableDisableLight(light, lightState);
             }
         } else {
-            foreach (Transform light in lightList){
-                DisableEmission(light);
-                EnableDisableLight(light, lightState);
+            foreach(Transform light in lightList){
+               DisableEmission(light); 
+               EnableDisableLight(light, lightState);
             }
         }
     }
@@ -40,5 +40,18 @@ public class LightsHandler : MonoBehaviour
         int childPosition = 0;
         Transform light = obj.GetChild(childPosition);
         light.gameObject.SetActive(lightState);
+    }
+    public void DisableLight(){
+        foreach (Transform light in lightList){
+            MeshRenderer mesh = light.GetComponent<MeshRenderer>();
+            int childPosition = 0;
+
+            mesh.material.DisableKeyword("_EMISSION");
+            Transform lightSpot = light.GetChild(childPosition);
+            lightSpot.gameObject.SetActive(false);
+
+            // Me desubscribo del evento asi no se buggea
+            lightSwitchInteraction.OnClickSwitch -= LightSwitchInteraction_OnClickSwitch;
+        }
     }
 }

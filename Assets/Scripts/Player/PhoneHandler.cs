@@ -17,8 +17,7 @@ public class PhoneHandler : MonoBehaviour
         phoneIsPickedUp = true;
     }
     private void GameInput_OnFlashlightAction(object sender, System.EventArgs e){
-        if (phoneIsPickedUp)
-        {
+        if (phoneIsPickedUp){
             phoneLight = !phoneLight;
             playerPhone.SetActive(phoneLight);
         }
