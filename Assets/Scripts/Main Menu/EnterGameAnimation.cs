@@ -1,18 +1,25 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnterGameAnimation : MonoBehaviour
 {
-    [SerializeField] private Camera camera1;
-    [SerializeField] private Camera camera2;
-    [SerializeField] private Camera camera3;
+    [SerializeField] private GameObject camera1;
+    [SerializeField] private GameObject camera2;
+    [SerializeField] private GameObject camera3;
     [SerializeField] private Transform door;
 
-    private void Start(){
-        StartCoroutine(cameraAnimation());
+    private void MainMenuButtons_OnButtonPlayClicked(object sender, System.EventArgs e){
+        StartCoroutine(CameraAnimation());
     }
 
-    IEnumerator cameraAnimation(){
+    private void Start(){
+        MainMenuButtons.Instance.OnButtonPlayedClicked += MainMenuButtons_OnButtonPlayClicked;
+    }
+
+    IEnumerator CameraAnimation(){
+        Debug.Log("Animation");
+        SceneManager.LoadScene(1);
         yield return null;
     }
 }
