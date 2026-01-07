@@ -6,9 +6,11 @@ public class MainMenuButtons : MonoBehaviour
 {
     public static MainMenuButtons Instance {get; private set;}
     public event EventHandler OnButtonPlayedClicked;
+    [SerializeField] private GameObject optionsCamera;
     [SerializeField] private Button playButton;
     [SerializeField] private Button optionsButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private Button returnButton;
 
     private void Awake(){
         Instance = this;
@@ -20,13 +22,17 @@ public class MainMenuButtons : MonoBehaviour
 
         optionsButton.onClick.AddListener(() =>
         {
-            Debug.Log("Options");
+            optionsCamera.SetActive(true);
         });
 
         exitButton.onClick.AddListener(() =>
         {
-            Debug.Log("Exit");
             Application.Quit();
+        });
+        
+        returnButton.onClick.AddListener(() =>
+        {
+            optionsCamera.SetActive(false);
         });
     }
 }
