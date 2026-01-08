@@ -7,8 +7,15 @@ public class LadderAnimation : MonoBehaviour
     [SerializeField] private Transform ladderFloor;
     // Referencia a la escalera de la pared
     [SerializeField] private GameObject ladderWall;
+    // Referencia a la camara 1
+    [SerializeField] private GameObject camera1;
+    // Referencia a la camara 2
+    [SerializeField] private GameObject camera2;
+    // Referencia a la ventana del conserje
+    [SerializeField] private GameObject movingWindow;
     // Referencia a la posicion final del jugador
     [SerializeField] private Transform playerNewTransform;
+    
 
     private void TriggerLadderAnimation_OnLadderInteraction(object sender, System.EventArgs e){
         StartCoroutine(FadeInOut());
@@ -25,17 +32,32 @@ public class LadderAnimation : MonoBehaviour
         
         // Fade In + Cambio de escaleras
         yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1.5f);
+        camera1.SetActive(true);
 
-        PlayerController.Instance.TeleportPlayer(playerNewTransform.position);
-
-        if(ladderFloor != null) {
-            Destroy(ladderFloor.gameObject);
-        }
+        // Borra una escalera y activa la otra
+        if(ladderFloor != null) Destroy(ladderFloor.gameObject);
         ladderWall.SetActive(true);
 
+        // Animacion de subir escalera
+        yield return new WaitForSecondsRealtime(2f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1.0f);
+        camera2.SetActive(true);
+        yield return new WaitForSecondsRealtime(3.0f);
+        WindowAnimation windowAnimation = movingWindow.GetComponent<WindowAnimation>();
+        windowAnimation.Interact();
+        yield return new WaitForSecondsRealtime(1.0f);
+        yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
+        yield return new WaitForSecondsRealtime(2.0f);
+        PlayerController.Instance.TeleportPlayer(playerNewTransform.position);
+        if(camera1 != null) Destroy(camera1);
+        if(camera2 != null) Destroy(camera2);
+        yield return new WaitForSecondsRealtime(2.0f);
+
+        // Volver al estado base
+        yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
+        yield return new WaitForSecondsRealtime(1.0f);
         GameInput.Instance.EnablePlayerInput();
         GameInput.Instance.EnableCameraInput();
     }
