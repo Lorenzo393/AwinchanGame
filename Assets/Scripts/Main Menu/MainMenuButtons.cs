@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +13,25 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private Button optionsButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button returnButton;
+    [SerializeField] private TMP_Dropdown resolutionsDropdown;
+    [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private Slider volumeSlider;
+    private Resolution[] resolutions;
 
     private void Awake(){
         Instance = this;
+
+        resolutions = Screen.resolutions;
+
+        resolutionsDropdown.ClearOptions();
+        
+        List<String> resolutionsStrings = new List<string>();
+
+        foreach(Resolution res in resolutions){
+            resolutionsStrings.Add(res.ToString());
+        }
+
+        resolutionsDropdown.AddOptions(resolutionsStrings);
 
         playButton.onClick.AddListener(() =>
         {
@@ -33,6 +51,22 @@ public class MainMenuButtons : MonoBehaviour
         returnButton.onClick.AddListener(() =>
         {
             optionsCamera.SetActive(false);
+        });
+
+        resolutionsDropdown.onValueChanged.AddListener( resolutionIndex =>
+        {
+            Resolution resolution = resolutions[resolutionIndex];
+            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        });
+
+        fullscreenToggle.onValueChanged.AddListener( isFullscreen =>
+        {
+            Screen.fullScreen = isFullscreen;
+        });
+
+        volumeSlider.onValueChanged.AddListener( volume =>
+        {
+            
         });
     }
 }
