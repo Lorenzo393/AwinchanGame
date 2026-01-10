@@ -21,6 +21,8 @@ public class MainMenuButtons : MonoBehaviour
     private void Awake(){
         Instance = this;
 
+        Time.timeScale = 1f;
+
         resolutions = Screen.resolutions;
 
         resolutionsDropdown.ClearOptions();

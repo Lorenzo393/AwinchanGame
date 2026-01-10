@@ -23,6 +23,8 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInventoryLeft;
     // Evento inventario derecha
     public event EventHandler OnInventoryRight;
+    // Evento pausa
+    public event EventHandler OnPauseAction;
     private void Awake(){
         // Inicializo el singleton
         Instance = this;
@@ -47,6 +49,21 @@ public class GameInput : MonoBehaviour
         inputSystem.Player.InventoryL.performed += InventoryL_performed;
         // Seteo evento inventario mover derecha
         inputSystem.Player.InventoryR.performed += InventoryR_performed;
+
+        // Seteo evento pausa
+        inputSystem.Player.Pause.performed += Pause_performed;
+    }
+
+    private void OnDestroy(){
+        inputSystem.Player.Sprint.started -= Sprint_started;
+        inputSystem.Player.Sprint.canceled -= Sprint_canceled;
+        inputSystem.Player.Interact.performed -= Interact_performed;
+        inputSystem.Player.Flashlight.performed -= Flashlight_performed;
+        inputSystem.Player.InventoryL.performed -= InventoryL_performed;
+        inputSystem.Player.InventoryR.performed -= InventoryR_performed;
+        inputSystem.Player.Pause.performed -= Pause_performed;
+
+        inputSystem.Dispose();
     }
     public Vector2 GetMovementVectorNormalized(){
         // Lee el valor de Vector2 del action map move
@@ -72,6 +89,9 @@ public class GameInput : MonoBehaviour
     }
     private void InventoryR_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
         OnInventoryRight?.Invoke(this, EventArgs.Empty);
+    }
+    private void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+        OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
     public void BlockPlayerInput(){
         inputSystem.Player.Disable();
