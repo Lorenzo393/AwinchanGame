@@ -20,6 +20,7 @@ public class PauseManager : MonoBehaviour
             OnGameUnpaused?.Invoke(this,EventArgs.Empty);
         }
     }
+
     private void Awake(){
         Instance = this;
     }

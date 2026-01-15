@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public static PlayerInteract Instance {get; private set;}
     // Referencia de la camara para ver hacia donde esta viendo el jugador
     [SerializeField] private new Transform camera;
     // Capa en las que puede interactuar el jugador
@@ -11,6 +12,9 @@ public class PlayerInteract : MonoBehaviour
         PlayerInteraction();
     }
 
+    private void Awake(){
+        Instance = this;
+    }
     private void Start(){
         // Evento interaccion
         GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;

@@ -25,8 +25,11 @@ public class AwinchanAI : MonoBehaviour
     [Header ("Triggers")]
     [SerializeField] private AwinchanChasingTrigger chasingTrigger;
     [SerializeField] private AwinchanStopTrigger stopTrigger;
-    [Header ("SpotsPositions")]
+    [Header ("Tracking player")]
     [SerializeField] private Transform playerPosition;
+    [SerializeField] private LayerMask obstacleMask;
+    private float viewDistance = 15f;
+    private float viewAngle = 60f;
     
     private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
@@ -65,17 +68,20 @@ public class AwinchanAI : MonoBehaviour
             case AwinchanStates.Roaming:
                 navMeshAgent.destination = roamDirection;
                 direction.position = roamDirection;
-                if(Vector3.Distance(transform.position, roamDirection) < reachedPositionDistance){
-                    roamDirection = GetRoamingPosition();
-                }
+                if(Vector3.Distance(transform.position, roamDirection) < reachedPositionDistance) roamDirection = GetRoamingPosition();
+                if(PlayerDetected()) awinchanState = AwinchanStates.Chasing;
+
                 break;
             case AwinchanStates.Chasing:
                 navMeshAgent.destination = playerPosition.position;
                 direction.position = playerPosition.position;
-                Debug.Log(Vector3.Distance(transform.position, playerPosition.position));
+                if(Vector3.Distance(transform.position, playerPosition.position) < reachedPositionDistance){
+                    Debug.Log("Attack");
+                    //awinchanState = AwinchanStates.Attack;
+                }
                 break;
             case AwinchanStates.Attack:
-
+                Debug.Log("Atacando");
                 break;
             case AwinchanStates.Disability:
 
@@ -90,6 +96,24 @@ public class AwinchanAI : MonoBehaviour
         yield return null;
     }
     
+    private bool PlayerDetected(){
+        Vector3 directionToPlayer = (playerPosition.position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, playerPosition.position);
+        bool playerDetected = false;
+
+        if (distance < viewDistance)
+        {
+            float angle = Vector3.Angle(transform.forward, directionToPlayer);
+            if (angle < viewAngle / 2f)
+            {
+                if (!Physics.Raycast(transform.position, directionToPlayer, distance, obstacleMask))
+                {
+                    playerDetected = true;
+                }
+            }
+        }
+        return playerDetected;
+    }
     private void TeleportAwinchan(Transform spot){
         this.transform.SetPositionAndRotation(spot.position, spot.rotation);
     }
