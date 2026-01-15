@@ -10,10 +10,9 @@ public class AwinchanAI : MonoBehaviour
     private enum AwinchanStates{
         Disability,
         Roaming,
-        Cheasing,
+        Chasing,
         Attack,
     }
-    private AwinchanStates awinchanState;
     [SerializeField] private Transform direction;
     [Header ("SpotsPositions")]
     [SerializeField] private Transform hiddenPosition;
@@ -23,49 +22,70 @@ public class AwinchanAI : MonoBehaviour
     [SerializeField] List<Transform> roamingPositionsList;
     [SerializeField]private Vector3 roamDirection;
     [SerializeField] private float reachedPositionDistance = 2f;
-
+    [Header ("Triggers")]
+    [SerializeField] private AwinchanChasingTrigger chasingTrigger;
+    [SerializeField] private AwinchanStopTrigger stopTrigger;
+    [Header ("SpotsPositions")]
+    [SerializeField] private Transform playerPosition;
+    
+    private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
+
+
+    private void PickUpPhone_OpPickUpPhone(object sender, System.EventArgs e){
+        TeleportAwinchan(firstPosition);
+
+    }
+    private void ChasingTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
+        StartCoroutine(StartingChasing());
+    }
+    private void StopTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
+        navMeshAgent.enabled = false;
+        TeleportAwinchan(spawnPosition);
+        navMeshAgent.enabled = true;
+        awinchanState = AwinchanStates.Roaming;
+    }
     private void Awake(){
         navMeshAgent = GetComponent<NavMeshAgent>();
-        
         navMeshAgent.enabled = false;
+
         TeleportAwinchan(hiddenPosition);
         awinchanState = AwinchanStates.Disability;
 
         roamDirection = GetRoamingPosition();
-        StartCoroutine(Test());
+    }
+
+    private void Start(){
+        PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OpPickUpPhone;
+        chasingTrigger.OnChasingTriggerEnter += ChasingTrigger_OnChasingTriggerEnter;
+        stopTrigger.OnStopTriggerEnter += StopTrigger_OnChasingTriggerEnter;
     }
     private void Update(){
         switch (awinchanState){
             case AwinchanStates.Roaming:
                 navMeshAgent.destination = roamDirection;
-                //direction.position = roamDirection;
+                direction.position = roamDirection;
                 if(Vector3.Distance(transform.position, roamDirection) < reachedPositionDistance){
                     roamDirection = GetRoamingPosition();
                 }
                 break;
-            case AwinchanStates.Cheasing:
+            case AwinchanStates.Chasing:
+                navMeshAgent.destination = playerPosition.position;
+                direction.position = playerPosition.position;
+                Debug.Log(Vector3.Distance(transform.position, playerPosition.position));
                 break;
             case AwinchanStates.Attack:
 
                 break;
             case AwinchanStates.Disability:
+
                 break;
-            
         }
     }
-
-    IEnumerator Test(){
-
+    IEnumerator StartingChasing(){
         yield return new WaitForSecondsRealtime(2.0f);
-        TeleportAwinchan(firstPosition);
         navMeshAgent.enabled = true;
-
-        yield return new WaitForSecondsRealtime(5.0f);
-        navMeshAgent.enabled = false;
-        TeleportAwinchan(spawnPosition);
-        navMeshAgent.enabled = true;
-        awinchanState = AwinchanStates.Roaming;
+        awinchanState = AwinchanStates.Chasing;
 
         yield return null;
     }

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     // Singleton
-    public static PlayerController Instance{get; private set;}
+    public static PlayerController Instance {get; private set;}
     // Character controller
     private CharacterController characterController;
     // Velocidad a la que camina el personaje

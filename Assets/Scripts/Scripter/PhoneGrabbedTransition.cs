@@ -1,25 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PhoneGrabbedTransition : MonoBehaviour
 {
+    public static PhoneGrabbedTransition Instance {get; private set;}
+    [Header ("Ladders")]
     [SerializeField] private GameObject ladderFirstPosition;
     [SerializeField] private GameObject ladderFinalPosition;
+    [Header ("Lights")]
     [SerializeField] private List<LightsHandler> lightsHandlersList;
     [SerializeField] private List<GameObject> lightsList;
+    [Header ("Triggers")]
+    [SerializeField] private GameObject chasingTrigger;
+    [SerializeField] private GameObject stopTrigger;
+
+    [Header ("Other things")]
     [SerializeField] private PickUpPhone pickUpPhone;
+    
 
     private void PickUpPhone_OnPickUpPhone(object sender, System.EventArgs e){
         StartCoroutine(PhoneTransition());
     }
+    private void Awake(){
+        Instance = this;
+    }
     private void Start(){
-        pickUpPhone.OnPickUpPhone += PickUpPhone_OnPickUpPhone;
+        PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OnPickUpPhone;
     }
 
     IEnumerator PhoneTransition(){
         Destroy(ladderFirstPosition);
         ladderFinalPosition.SetActive(true);
+        chasingTrigger.SetActive(true);
+        stopTrigger.SetActive(true);
 
         // Espero 2 segundos
         yield return new WaitForSecondsRealtime(2.0f);
