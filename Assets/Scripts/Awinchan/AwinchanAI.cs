@@ -11,7 +11,9 @@ public class AwinchanAI : MonoBehaviour
         Disability,
         Roaming,
         Chasing,
+        ChasingSpecial,
         Attack,
+        MissPlayer,
     }
     [SerializeField] private Transform direction;
     [Header ("SpotsPositions")]
@@ -28,8 +30,12 @@ public class AwinchanAI : MonoBehaviour
     [Header ("Tracking player")]
     [SerializeField] private Transform playerPosition;
     [SerializeField] private LayerMask obstacleMask;
-    private float viewDistance = 15f;
+    private float viewDistance = 20f;
     private float viewAngle = 60f;
+    [Header ("Loosing Player")]
+    [SerializeField] private float stopChasingDistance = 35f;
+    [SerializeField] private float stopChasingTimer = 4f;
+    [SerializeField] private float timeSinceLastSeen = 0f;
     
     private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
@@ -64,6 +70,7 @@ public class AwinchanAI : MonoBehaviour
         stopTrigger.OnStopTriggerEnter += StopTrigger_OnChasingTriggerEnter;
     }
     private void Update(){
+        Debug.DrawRay(transform.position, ((playerPosition.position - transform.position).normalized) * viewDistance, Color.red);
         switch (awinchanState){
             case AwinchanStates.Roaming:
                 navMeshAgent.destination = roamDirection;
@@ -72,6 +79,7 @@ public class AwinchanAI : MonoBehaviour
                 if(PlayerDetected()) awinchanState = AwinchanStates.Chasing;
 
                 break;
+
             case AwinchanStates.Chasing:
                 navMeshAgent.destination = playerPosition.position;
                 direction.position = playerPosition.position;
@@ -79,20 +87,57 @@ public class AwinchanAI : MonoBehaviour
                     Debug.Log("Attack");
                     //awinchanState = AwinchanStates.Attack;
                 }
+                if(Vector3.Distance(transform.position, playerPosition.position) > stopChasingDistance){
+                    awinchanState = AwinchanStates.MissPlayer;
+                }
+                if (!PlayerDetected()){
+                    timeSinceLastSeen += Time.deltaTime;
+                    if(timeSinceLastSeen > stopChasingTimer){
+                        timeSinceLastSeen = 0f;
+                        awinchanState = AwinchanStates.MissPlayer;
+                    }
+                } else {
+                  timeSinceLastSeen = 0f;  
+                }
                 break;
+
+            case AwinchanStates.ChasingSpecial:
+                navMeshAgent.destination = playerPosition.position;
+                direction.position = playerPosition.position;
+                if(Vector3.Distance(transform.position, playerPosition.position) < reachedPositionDistance){
+                    Debug.Log("Attack");
+                    //awinchanState = AwinchanStates.Attack;
+                }
+                break;
+
             case AwinchanStates.Attack:
                 Debug.Log("Atacando");
                 break;
-            case AwinchanStates.Disability:
 
+            case AwinchanStates.MissPlayer:
+                StartCoroutine(MissingPlayer());
+                if(PlayerDetected()) {
+                    awinchanState = AwinchanStates.Chasing;
+                } else {
+                    roamDirection = GetRoamingPosition();
+                    awinchanState = AwinchanStates.Roaming; 
+                }
                 break;
+            case AwinchanStates.Disability:
+                break;
+
         }
     }
     IEnumerator StartingChasing(){
         yield return new WaitForSecondsRealtime(2.0f);
         navMeshAgent.enabled = true;
-        awinchanState = AwinchanStates.Chasing;
+        awinchanState = AwinchanStates.ChasingSpecial;
 
+        yield return null;
+    }
+    IEnumerator MissingPlayer(){
+        yield return new WaitForSecondsRealtime(3.0f);
+        // Animacion desconcertado
         yield return null;
     }
     
