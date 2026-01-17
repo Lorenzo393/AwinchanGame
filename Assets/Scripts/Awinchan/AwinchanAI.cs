@@ -33,7 +33,7 @@ public class AwinchanAI : MonoBehaviour
     private float viewDistance = 20f;
     private float viewAngle = 60f;
     [Header ("Loosing Player")]
-    [SerializeField] private float stopChasingDistance = 35f;
+    [SerializeField] private float stopChasingDistance = 50f;
     [SerializeField] private float stopChasingTimer = 4f;
     [SerializeField] private float timeSinceLastSeen = 0f;
     
