@@ -7,7 +7,7 @@ public class CursorLock : MonoBehaviour
     private void Start(){
         Instance = this;
 
-        BlockCursor();
+        EnableCursor();
     }
 
     public void BlockCursor(){
@@ -15,7 +15,7 @@ public class CursorLock : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void UnblockCursor(){
+    public void EnableCursor(){
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }

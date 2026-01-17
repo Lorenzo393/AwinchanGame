@@ -25,4 +25,10 @@ public class FadeAnimation : MonoBehaviour
         }
         canvas.alpha = 0f;
     }
+    public void FadeInInstant(){
+        canvas.alpha = 1f;
+    }
+    public void FadeOutInstant(){
+        canvas.alpha = 0f;
+    }
 }

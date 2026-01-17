@@ -12,7 +12,7 @@ public class PauseManager : MonoBehaviour
 
         if (isPaused){
             Time.timeScale = 0f;
-            CursorLock.Instance.UnblockCursor();
+            CursorLock.Instance.EnableCursor();
             OnGamePaused?.Invoke(this,EventArgs.Empty);
         } else {
             Time.timeScale = 1f;
