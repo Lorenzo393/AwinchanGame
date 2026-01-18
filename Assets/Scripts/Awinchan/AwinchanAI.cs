@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class AwinchanAI : MonoBehaviour
 {
@@ -39,11 +37,11 @@ public class AwinchanAI : MonoBehaviour
     
     private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
+    private Animator animator;
 
 
     private void PickUpPhone_OpPickUpPhone(object sender, System.EventArgs e){
         TeleportAwinchan(firstPosition);
-
     }
     private void ChasingTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
         StartCoroutine(StartingChasing());
@@ -52,11 +50,16 @@ public class AwinchanAI : MonoBehaviour
         navMeshAgent.enabled = false;
         TeleportAwinchan(spawnPosition);
         navMeshAgent.enabled = true;
+
+        animator.SetBool("isRunning",false);
+        animator.SetBool("isWalking",true);
+
         awinchanState = AwinchanStates.Roaming;
     }
     private void Awake(){
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = false;
+        animator = GetComponent<Animator>();
 
         TeleportAwinchan(hiddenPosition);
         awinchanState = AwinchanStates.Disability;
@@ -76,8 +79,12 @@ public class AwinchanAI : MonoBehaviour
                 navMeshAgent.destination = roamDirection;
                 direction.position = roamDirection;
                 if(Vector3.Distance(transform.position, roamDirection) < reachedPositionDistance) roamDirection = GetRoamingPosition();
-                if(PlayerDetected()) awinchanState = AwinchanStates.Chasing;
+                if(PlayerDetected()) {
+                    animator.SetBool("isWalking",false);
+                    animator.SetBool("isRunning",true);
 
+                    awinchanState = AwinchanStates.Chasing;
+                }
                 break;
 
             case AwinchanStates.Chasing:
@@ -88,12 +95,14 @@ public class AwinchanAI : MonoBehaviour
                     //awinchanState = AwinchanStates.Attack;
                 }
                 if(Vector3.Distance(transform.position, playerPosition.position) > stopChasingDistance){
+                    animator.SetBool("isRunning",false);
                     awinchanState = AwinchanStates.MissPlayer;
                 }
                 if (!PlayerDetected()){
                     timeSinceLastSeen += Time.deltaTime;
                     if(timeSinceLastSeen > stopChasingTimer){
                         timeSinceLastSeen = 0f;
+                        animator.SetBool("isRunning",false);
                         awinchanState = AwinchanStates.MissPlayer;
                     }
                 } else {
@@ -112,18 +121,23 @@ public class AwinchanAI : MonoBehaviour
 
             case AwinchanStates.Attack:
                 Debug.Log("Atacando");
+                // Animacion atacar
                 break;
 
             case AwinchanStates.MissPlayer:
                 StartCoroutine(MissingPlayer());
                 if(PlayerDetected()) {
+                    animator.SetBool("isRunning",true);
                     awinchanState = AwinchanStates.Chasing;
                 } else {
                     roamDirection = GetRoamingPosition();
+                    animator.SetBool("isWalking",true);
                     awinchanState = AwinchanStates.Roaming; 
                 }
+                // Animacion idle
                 break;
             case AwinchanStates.Disability:
+                animator.SetBool("isDeath",true);
                 break;
 
         }
@@ -131,13 +145,16 @@ public class AwinchanAI : MonoBehaviour
     IEnumerator StartingChasing(){
         yield return new WaitForSecondsRealtime(2.0f);
         navMeshAgent.enabled = true;
+
+        animator.SetBool("isDeath",false);
+        animator.SetBool("isRunning",true);
+
         awinchanState = AwinchanStates.ChasingSpecial;
 
         yield return null;
     }
     IEnumerator MissingPlayer(){
         yield return new WaitForSecondsRealtime(3.0f);
-        // Animacion desconcertado
         yield return null;
     }
     
@@ -166,5 +183,4 @@ public class AwinchanAI : MonoBehaviour
     private Vector3 GetRoamingPosition(){
         return roamingPositionsList[Random.Range(0,roamingPositionsList.Count)].position;
     }
-
 }
