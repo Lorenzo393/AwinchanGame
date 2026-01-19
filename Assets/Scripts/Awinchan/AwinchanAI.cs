@@ -38,6 +38,10 @@ public class AwinchanAI : MonoBehaviour
     private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
+    private float minimumDetectionArea = 4f;
+    private float runningSpeed = 12f;
+    private float walkingSpeed = 8f;
+    private float deathSpeed = 0f;
 
 
     private void PickUpPhone_OpPickUpPhone(object sender, System.EventArgs e){
@@ -50,6 +54,7 @@ public class AwinchanAI : MonoBehaviour
         navMeshAgent.enabled = false;
         TeleportAwinchan(spawnPosition);
         navMeshAgent.enabled = true;
+        navMeshAgent.speed = walkingSpeed;
 
         animator.SetBool("isRunning",false);
         animator.SetBool("isWalking",true);
@@ -59,6 +64,8 @@ public class AwinchanAI : MonoBehaviour
     private void Awake(){
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = false;
+        navMeshAgent.speed = walkingSpeed;
+
         animator = GetComponent<Animator>();
 
         TeleportAwinchan(hiddenPosition);
@@ -83,6 +90,7 @@ public class AwinchanAI : MonoBehaviour
                     animator.SetBool("isWalking",false);
                     animator.SetBool("isRunning",true);
 
+                    navMeshAgent.speed = runningSpeed;
                     awinchanState = AwinchanStates.Chasing;
                 }
                 break;
@@ -96,6 +104,7 @@ public class AwinchanAI : MonoBehaviour
                 }
                 if(Vector3.Distance(transform.position, playerPosition.position) > stopChasingDistance){
                     animator.SetBool("isRunning",false);
+                    navMeshAgent.speed = walkingSpeed;
                     awinchanState = AwinchanStates.MissPlayer;
                 }
                 if (!PlayerDetected()){
@@ -103,6 +112,7 @@ public class AwinchanAI : MonoBehaviour
                     if(timeSinceLastSeen > stopChasingTimer){
                         timeSinceLastSeen = 0f;
                         animator.SetBool("isRunning",false);
+                        navMeshAgent.speed = walkingSpeed;
                         awinchanState = AwinchanStates.MissPlayer;
                     }
                 } else {
@@ -128,15 +138,18 @@ public class AwinchanAI : MonoBehaviour
                 StartCoroutine(MissingPlayer());
                 if(PlayerDetected()) {
                     animator.SetBool("isRunning",true);
+                    navMeshAgent.speed = runningSpeed;
                     awinchanState = AwinchanStates.Chasing;
                 } else {
                     roamDirection = GetRoamingPosition();
                     animator.SetBool("isWalking",true);
+                    navMeshAgent.speed = walkingSpeed;
                     awinchanState = AwinchanStates.Roaming; 
                 }
                 // Animacion idle
                 break;
             case AwinchanStates.Disability:
+                navMeshAgent.speed = deathSpeed;
                 animator.SetBool("isDeath",true);
                 break;
 
@@ -145,6 +158,7 @@ public class AwinchanAI : MonoBehaviour
     IEnumerator StartingChasing(){
         yield return new WaitForSecondsRealtime(2.0f);
         navMeshAgent.enabled = true;
+        navMeshAgent.speed = runningSpeed;
 
         animator.SetBool("isDeath",false);
         animator.SetBool("isRunning",true);
@@ -163,13 +177,12 @@ public class AwinchanAI : MonoBehaviour
         float distance = Vector3.Distance(transform.position, playerPosition.position);
         bool playerDetected = false;
 
-        if (distance < viewDistance)
-        {
+        if (distance < minimumDetectionArea) playerDetected = true;
+
+        if (distance < viewDistance){
             float angle = Vector3.Angle(transform.forward, directionToPlayer);
-            if (angle < viewAngle / 2f)
-            {
-                if (!Physics.Raycast(transform.position, directionToPlayer, distance, obstacleMask))
-                {
+            if (angle < viewAngle / 2f){
+                if (!Physics.Raycast(transform.position, directionToPlayer, distance, obstacleMask)){
                     playerDetected = true;
                 }
             }
