@@ -11,12 +11,14 @@ public class PauseManager : MonoBehaviour
         isPaused = !isPaused;
 
         if (isPaused){
-            Time.timeScale = 0f;
+            GameInput.Instance.BlockCameraInput();
             CursorLock.Instance.EnableCursor();
             OnGamePaused?.Invoke(this,EventArgs.Empty);
+            Time.timeScale = 0f;
         } else {
             Time.timeScale = 1f;
             CursorLock.Instance.BlockCursor();
+            GameInput.Instance.EnableCameraInput();
             OnGameUnpaused?.Invoke(this,EventArgs.Empty);
         }
     }

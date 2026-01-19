@@ -101,8 +101,10 @@ public class GameInput : MonoBehaviour
     }
     public void BlockCameraInput(){
         cinemachineInputAxisController.enabled = false;
+        inputSystem.Player.Interact.performed -= Interact_performed;
     }
     public void EnableCameraInput(){
         cinemachineInputAxisController.enabled = true;
+        inputSystem.Player.Interact.performed += Interact_performed;
     }
 }
