@@ -18,6 +18,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
 
     [Header ("Other things")]
     [SerializeField] private PickUpPhone pickUpPhone;
+    [SerializeField] private GameObject principalsKey;
     
 
     private void PickUpPhone_OnPickUpPhone(object sender, System.EventArgs e){
@@ -28,6 +29,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
     }
     private void Start(){
         PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OnPickUpPhone;
+        principalsKey.SetActive(false);
     }
 
     IEnumerator PhoneTransition(){
@@ -58,6 +60,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
 
         // Sonido metalico
 
+        principalsKey.SetActive(true);
         yield return null;
     }
 }
