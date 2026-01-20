@@ -132,18 +132,10 @@ public class AwinchanAI : MonoBehaviour
 
             case AwinchanStates.MissPlayer:
                 StartCoroutine(MissingPlayer());
-                if(PlayerDetected()) {
-                    animator.SetBool("isRunning",true);
-                    navMeshAgent.speed = runningSpeed;
-                    awinchanState = AwinchanStates.Chasing;
-                } else {
-                    roamDirection = GetRoamingPosition();
-                    animator.SetBool("isWalking",true);
-                    navMeshAgent.speed = walkingSpeed;
-                    awinchanState = AwinchanStates.Roaming; 
-                }
-                // Animacion idle
+                if(PlayerDetected())TMissPlayerChasing();
+                else TMissPlayerRoaming();
                 break;
+                
             case AwinchanStates.Disability:
                 navMeshAgent.speed = deathSpeed;
                 animator.SetBool("isDeath",true);
@@ -197,6 +189,19 @@ public class AwinchanAI : MonoBehaviour
         animator.SetBool("isWalking",false);
         animator.SetBool("isRunning",true);
 
+        navMeshAgent.speed = runningSpeed;
+        awinchanState = AwinchanStates.Chasing;
+    }
+
+    private void TMissPlayerRoaming(){
+        roamDirection = GetRoamingPosition();
+        animator.SetBool("isWalking",true);
+        navMeshAgent.speed = walkingSpeed;
+        awinchanState = AwinchanStates.Roaming; 
+    }
+
+    private void TMissPlayerChasing(){
+        animator.SetBool("isRunning",true);
         navMeshAgent.speed = runningSpeed;
         awinchanState = AwinchanStates.Chasing;
     }
