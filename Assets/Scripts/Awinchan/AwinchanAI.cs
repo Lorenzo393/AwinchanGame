@@ -86,13 +86,9 @@ public class AwinchanAI : MonoBehaviour
                 navMeshAgent.destination = roamDirection;
                 direction.position = roamDirection;
                 if(Vector3.Distance(transform.position, roamDirection) < reachedPositionDistance) roamDirection = GetRoamingPosition();
-                if(PlayerDetected()) {
-                    animator.SetBool("isWalking",false);
-                    animator.SetBool("isRunning",true);
 
-                    navMeshAgent.speed = runningSpeed;
-                    awinchanState = AwinchanStates.Chasing;
-                }
+                if(PlayerDetected()) TRoamingChasing();
+                
                 break;
 
             case AwinchanStates.Chasing:
@@ -195,5 +191,13 @@ public class AwinchanAI : MonoBehaviour
 
     private Vector3 GetRoamingPosition(){
         return roamingPositionsList[Random.Range(0,roamingPositionsList.Count)].position;
+    }
+
+    private void TRoamingChasing(){
+        animator.SetBool("isWalking",false);
+        animator.SetBool("isRunning",true);
+
+        navMeshAgent.speed = runningSpeed;
+        awinchanState = AwinchanStates.Chasing;
     }
 }

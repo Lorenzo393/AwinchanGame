@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Cinemachine;
 using Unity.IntegerTime;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Fuerza de empuje normal/ fuerza que se aplica con el personaje tocando el suelo 
     private const float groundStickForce = -2.0f;
 
-    // STAMINA
+    [Header ("Stamina")]
     [SerializeField] private float maxStamina = 5f;
     [SerializeField] private float staminaDrain = 1f;
     [SerializeField] private float staminaRegen = 0.5f;
@@ -32,11 +33,13 @@ public class PlayerController : MonoBehaviour
     private bool isSprinting;
     private bool isRunningFoward;
 
-    // SMOTH
+    [Header ("Smooth")]
     [SerializeField] private float movementSmoothTime = 0.1f;
+    [SerializeField] private NoiseSettings noiseProfile;
     private Vector3 smoothMovement;
     private Vector3 smoothMovementVelocity; 
-    
+
+    private CinemachineBasicMultiChannelPerlin headBob;    
 
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e){
         isSprinting = true;
@@ -61,6 +64,11 @@ public class PlayerController : MonoBehaviour
         GameInput.Instance.OnSprintActionStarted += GameInput_OnSprintActionStarted;
         // Evento correr terminado
         GameInput.Instance.OnSprintActionCanceled += GameInput_OnSprintActionCanceled;
+
+        // Enlazo el componenete de la camara
+        headBob = camera.gameObject.GetComponent<CinemachineBasicMultiChannelPerlin>();
+        // Configuro el perfil de ruido
+        headBob.NoiseProfile = noiseProfile;
     }
     private void Update(){
         // Mueve al personaje
@@ -96,6 +104,24 @@ public class PlayerController : MonoBehaviour
 
         // Mueve al personaje multiplicando su movimiento por deltaTime
         characterController.Move(smoothMovement * Time.deltaTime);
+        
+        if(inputVector == Vector2.zero){
+            // Quieto
+            headBob.AmplitudeGain = 1.1f;
+            headBob.FrequencyGain = 0.3f;
+        }
+        if(inputVector != Vector2.zero && currentSpeed == walkingSpeed){
+            // Caminando
+            headBob.AmplitudeGain = 1.05f;
+            headBob.FrequencyGain = 1f;
+        }
+        if(inputVector != Vector2.zero && currentSpeed == runningSpeed)
+        {
+            // Corriendo
+            headBob.AmplitudeGain = 1f;
+            headBob.FrequencyGain = 2f;
+        }
+        
     }
     
     private void ConsumeStamina(){
