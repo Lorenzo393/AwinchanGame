@@ -32,7 +32,7 @@ public class AwinchanAI : MonoBehaviour
     private float viewAngle = 60f;
     [Header ("Loosing Player")]
     [SerializeField] private float stopChasingDistance = 50f;
-    [SerializeField] private float stopChasingTimer = 4f;
+    [SerializeField] private float stopChasingTimer = 3.5f;
     [SerializeField] private float timeSinceLastSeen = 0f;
     
     private AwinchanStates awinchanState;
@@ -144,8 +144,8 @@ public class AwinchanAI : MonoBehaviour
         }
     }
     IEnumerator StartingChasing(){
-        yield return new WaitForSecondsRealtime(2.0f);
         navMeshAgent.enabled = true;
+        yield return new WaitForSecondsRealtime(1.4f);
         navMeshAgent.speed = runningSpeed;
 
         animator.SetBool("isDeath",false);
