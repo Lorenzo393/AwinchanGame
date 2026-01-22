@@ -10,6 +10,7 @@ public class LightSwitchInteraction : MonoBehaviour, IInteractable
     public class OnClickSwitchEventArgs: EventArgs{
         public bool lightState;
     }
+    [SerializeField] private AudioClip switchInteractionSound;
     // Encendido/apagado de las luces
     [SerializeField] private bool lightState;
     private void Start(){
@@ -17,6 +18,7 @@ public class LightSwitchInteraction : MonoBehaviour, IInteractable
     }
     public void Interact(){
         lightState = !lightState;
+        SoundManager.Instance.PlaySound(switchInteractionSound, transform.position);
         OnClickSwitch?.Invoke(this, new OnClickSwitchEventArgs{lightState = lightState});
     }
 }
