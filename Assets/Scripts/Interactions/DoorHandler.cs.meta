@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: 1030f39c4efb7c14089f3fd1c12057ab
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - unlockDoorSound: {fileID: 8300000, guid: 78808e33d39893b47b8cc28ff6c11961, type: 3}
+  - blockedDoorSound: {fileID: 8300000, guid: 1ae3f131ef9a3184c8df52dad74962b7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

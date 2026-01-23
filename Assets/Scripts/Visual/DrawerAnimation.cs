@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class DrawerAnimation : MonoBehaviour, IInteractable
 {
+    [SerializeField] private AudioClip openDrawerSound;
+    [SerializeField] private AudioClip closeDrawerSound;
+    private float audioVolume = 0.5f;
     private Vector3 closedPos;
     private Vector3 openedPos;
     private float openedLength = 0.376f;
@@ -11,8 +14,13 @@ public class DrawerAnimation : MonoBehaviour, IInteractable
     private bool isMoving = false;
     public void Interact(){
         if (!isMoving){
-            if(!isOpen) StartCoroutine(OpenCloseDrawer(closedPos, openedPos));
-            else StartCoroutine(OpenCloseDrawer(openedPos, closedPos));
+            if(!isOpen) {
+                SoundManager.Instance.PlaySound(openDrawerSound, transform.position, audioVolume);
+                StartCoroutine(OpenCloseDrawer(closedPos, openedPos));
+            } else {
+                SoundManager.Instance.PlaySound(closeDrawerSound, transform.position, audioVolume);
+                StartCoroutine(OpenCloseDrawer(openedPos, closedPos));
+            }
             
             isOpen = !isOpen;
         }

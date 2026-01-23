@@ -5,6 +5,7 @@ public class DoorHandler : MonoBehaviour, IInteractable
 {
     public event EventHandler OnDoorInteract;
     [SerializeField] private AudioClip unlockDoorSound;
+    [SerializeField] private AudioClip blockedDoorSound;
     [SerializeField] private Key.KeyTipe unlockKey;
     [SerializeField] private bool unlockedDoor = false;
     public void Interact(){
@@ -14,7 +15,7 @@ public class DoorHandler : MonoBehaviour, IInteractable
                 unlockedDoor = true;
                 PlayerInventory.Instance.RemoveKey(unlockKey);
                 OnDoorInteract?.Invoke(this, EventArgs.Empty);
-            } else Debug.Log("LLave incorrecta"); 
+            } else SoundManager.Instance.PlaySound(blockedDoorSound, transform.position);
         } else OnDoorInteract?.Invoke(this, EventArgs.Empty);
     }
 }
