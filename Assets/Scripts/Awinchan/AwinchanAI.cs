@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class AwinchanAI : MonoBehaviour
 {
+    public static AwinchanAI Instance {get; private set;}
     private enum AwinchanStates{
         Disability,
         Roaming,
@@ -62,6 +63,8 @@ public class AwinchanAI : MonoBehaviour
         awinchanState = AwinchanStates.Roaming;
     }
     private void Awake(){
+        Instance = this;
+
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = false;
         navMeshAgent.speed = walkingSpeed;
@@ -204,5 +207,11 @@ public class AwinchanAI : MonoBehaviour
         animator.SetBool("isRunning",true);
         navMeshAgent.speed = runningSpeed;
         awinchanState = AwinchanStates.Chasing;
+    }
+
+    public void DisabilityAwinchan(){
+        animator.SetBool("isWalking",false);
+        animator.SetBool("isRunning",false);
+        awinchanState = AwinchanStates.Disability;
     }
 }
