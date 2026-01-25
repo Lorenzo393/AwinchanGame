@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PhoneHandler : MonoBehaviour
 {
+    // Sonido sacar guardar telefono
+    [SerializeField] private AudioClip phoneSound; 
     // Referencia al telefono del jugador
     [SerializeField] private GameObject playerPhone;
     // Referencia al telefono a agarrar
@@ -20,6 +22,7 @@ public class PhoneHandler : MonoBehaviour
         if (phoneIsPickedUp){
             phoneLight = !phoneLight;
             playerPhone.SetActive(phoneLight);
+            SoundManager.Instance.PlaySound(phoneSound, transform.position, 0.5f);
         }
     }
 

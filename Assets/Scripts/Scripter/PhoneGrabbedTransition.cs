@@ -6,15 +6,24 @@ using UnityEngine;
 public class PhoneGrabbedTransition : MonoBehaviour
 {
     public static PhoneGrabbedTransition Instance {get; private set;}
+
     [Header ("Ladders")]
     [SerializeField] private GameObject ladderFirstPosition;
     [SerializeField] private GameObject ladderFinalPosition;
+
     [Header ("Lights")]
     [SerializeField] private List<LightsHandler> lightsHandlersList;
     [SerializeField] private List<GameObject> lightsList;
+    [SerializeField] private GameObject deskLamp;
+
     [Header ("Triggers")]
     [SerializeField] private GameObject chasingTrigger;
     [SerializeField] private GameObject stopTrigger;
+
+    [Header ("Audios")]
+    [SerializeField] private AudioSource fridgeSound;
+    [SerializeField] private AudioSource janitorsMachineSound;
+    [SerializeField] private AudioSource bathroomMachineSound;
 
     [Header ("Other things")]
     [SerializeField] private PickUpPhone pickUpPhone;
@@ -49,6 +58,15 @@ public class PhoneGrabbedTransition : MonoBehaviour
             Destroy(lightsHandler);
         }
         foreach(GameObject light in lightsList) Destroy(light);
+
+        DestroyLampEmition(deskLamp);
+
+        fridgeSound.enabled = false;
+        janitorsMachineSound.enabled = false;
+        bathroomMachineSound.enabled = false;
+
+
+
         // Espero 2 segundos
         yield return new WaitForSeconds(2);
 
@@ -62,5 +80,10 @@ public class PhoneGrabbedTransition : MonoBehaviour
 
         principalsKey.SetActive(true);
         yield return null;
+    }
+
+    private void DestroyLampEmition(GameObject obj){
+        MeshRenderer mesh = obj.GetComponent<MeshRenderer>();
+        mesh.material.DisableKeyword("_EMISSION");
     }
 }
