@@ -148,7 +148,7 @@ public class AwinchanAI : MonoBehaviour
     }
     IEnumerator StartingChasing(){
         navMeshAgent.enabled = true;
-        yield return new WaitForSecondsRealtime(1.4f);
+        yield return new WaitForSecondsRealtime(1f);
         navMeshAgent.speed = runningSpeed;
 
         animator.SetBool("isDeath",false);

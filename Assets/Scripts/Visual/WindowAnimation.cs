@@ -3,16 +3,23 @@ using UnityEngine;
 
 public class WindowAnimation : MonoBehaviour, IInteractable
 {
+    [SerializeField] private AudioClip openWindowSound;
+    [SerializeField] private AudioClip closeWindowSound;
+    [SerializeField] private bool isOpen = false;
     private Vector3 initialPos;
     private Vector3 finalPos;
     private float animationSpeed = 1.0f;
     private bool isMoving = false;
-    [SerializeField] private bool isOpen = false;
 
     public void Interact(){
         if (!isMoving){
-            if (!isOpen) StartCoroutine(OpenCloseWindow(initialPos, finalPos));
-            else StartCoroutine(OpenCloseWindow(finalPos, initialPos));
+            if (!isOpen) {
+                SoundManager.Instance.PlaySound(openWindowSound, transform.position);
+                StartCoroutine(OpenCloseWindow(initialPos, finalPos));
+            } else {
+                StartCoroutine(OpenCloseWindow(finalPos, initialPos));
+                SoundManager.Instance.PlaySound(closeWindowSound, transform.position);
+            }
             
             isOpen = !isOpen;
         }
