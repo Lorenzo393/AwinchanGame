@@ -18,7 +18,7 @@ public class LightSwitchInteraction : MonoBehaviour, IInteractable
     }
     public void Interact(){
         lightState = !lightState;
-        SoundManager.Instance.PlaySound(switchInteractionSound, transform.position);
+        SoundManager.Instance.PlaySound(switchInteractionSound, transform.position,0.8f);
         OnClickSwitch?.Invoke(this, new OnClickSwitchEventArgs{lightState = lightState});
     }
 }

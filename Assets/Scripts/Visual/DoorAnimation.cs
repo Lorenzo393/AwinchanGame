@@ -1,11 +1,14 @@
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class DoorAnimation : MonoBehaviour
 {
     [SerializeField] private AudioClip openDoorSound;
     [SerializeField] private AudioClip closeDoorSound;
+    [SerializeField] private float delaySound = 0.3f;
+    [SerializeField] private float volume = 1.0f;
     private DoorHandler doorHandler;
     private Quaternion closedDoorRot;
     private Quaternion openedDoorRot;
@@ -16,11 +19,11 @@ public class DoorAnimation : MonoBehaviour
     private void DoorHandler_OnDoorInteract(object sender, System.EventArgs e){
         if (!isMoving){
             if(!isOpen) {
-                SoundManager.Instance.PlaySound(openDoorSound, transform.position);
+                SoundManager.Instance.PlaySound(openDoorSound, transform.position, volume);
                 StartCoroutine(OpenCloseDoor(closedDoorRot, openedDoorRot));
             } else {
                 StartCoroutine(OpenCloseDoor(openedDoorRot, closedDoorRot));
-                StartCoroutine(CloseDoorSound(0.3f));
+                StartCoroutine(CloseDoorSound(delaySound));
             }
             isOpen = !isOpen;
         }
@@ -46,7 +49,7 @@ public class DoorAnimation : MonoBehaviour
     }
     IEnumerator CloseDoorSound(float seconds){
         yield return new WaitForSecondsRealtime(seconds);
-        SoundManager.Instance.PlaySound(closeDoorSound, transform.position);
+        SoundManager.Instance.PlaySound(closeDoorSound, transform.position, volume);
         yield return null;
     }
 }

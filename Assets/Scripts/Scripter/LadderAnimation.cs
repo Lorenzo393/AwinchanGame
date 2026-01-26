@@ -15,6 +15,8 @@ public class LadderAnimation : MonoBehaviour
     [SerializeField] private GameObject movingWindow;
     // Referencia a la posicion final del jugador
     [SerializeField] private Transform playerNewTransform;
+    // Referencia al script de transicion de volumen
+    [SerializeField] private VolumeTransition volumeTransition;
     
 
     private void TriggerLadderAnimation_OnLadderInteraction(object sender, System.EventArgs e){
@@ -49,7 +51,9 @@ public class LadderAnimation : MonoBehaviour
         windowAnimation.Interact();
         yield return new WaitForSecondsRealtime(1.0f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
+        volumeTransition.SetVolume(0.009f);
         yield return new WaitForSecondsRealtime(2.0f);
+        volumeTransition.SetVolume(0.003f);
         PlayerController.Instance.TeleportPlayer(playerNewTransform.position);
         if(camera1 != null) Destroy(camera1);
         if(camera2 != null) Destroy(camera2);
