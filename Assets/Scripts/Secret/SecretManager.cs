@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class SecretManager : MonoBehaviour
     public static SecretManager Instance {get; private set;}
     [SerializeField] private Transform pivot1;
     [SerializeField] private Transform pivot2;
+    private float openRotation = 90f;
 
     [SerializeField] private GameObject piece1;
     [SerializeField] private GameObject piece2;
@@ -13,6 +15,7 @@ public class SecretManager : MonoBehaviour
     [SerializeField] private GameObject piece4;
     [SerializeField] private GameObject lastPiece;
 
+    private float openTime = 10f;
     private bool canOpen = false;
     private int maxPieces = 4;
     private int piecesClick = 0;
@@ -57,7 +60,19 @@ public class SecretManager : MonoBehaviour
     }
 
     IEnumerator PivotAnimator(){
-        Debug.Log("Open");
+        Quaternion pivot1OpenRotation = Quaternion.Euler(pivot1.localRotation.x, openRotation, pivot1.localRotation.z);
+        Quaternion pivot2OpenRotation = Quaternion.Euler(pivot1.localRotation.x, -openRotation, pivot1.localRotation.z);
+        
+        float timer = 0f;
+        for(float t = 0f ; t < 1.0f ; t = timer / openTime){
+            pivot1.localRotation = Quaternion.Slerp(pivot1.localRotation, pivot1OpenRotation, t);
+            pivot2.localRotation = Quaternion.Slerp(pivot2.localRotation, pivot2OpenRotation, t);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        pivot1.localRotation = pivot1OpenRotation;
+        pivot2.localRotation = pivot2OpenRotation;
+
         yield return null;
     }
 
