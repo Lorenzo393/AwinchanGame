@@ -24,6 +24,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
     [SerializeField] private AudioSource fridgeSound;
     [SerializeField] private AudioSource janitorsMachineSound;
     [SerializeField] private AudioSource bathroomMachineSound;
+    [SerializeField] private AudioSource thunderSound;
 
     [Header ("Other things")]
     [SerializeField] private PickUpPhone pickUpPhone;
@@ -47,10 +48,14 @@ public class PhoneGrabbedTransition : MonoBehaviour
         chasingTrigger.SetActive(true);
         stopTrigger.SetActive(true);
 
-        // Espero 2 segundos
-        yield return new WaitForSecondsRealtime(2.0f);
+        // Espero 1 segundo
+        yield return new WaitForSecondsRealtime(1.0f);
 
         // Trueno
+        thunderSound.enabled = true;
+
+        // Espero 1 segundo
+        yield return new WaitForSecondsRealtime(1.0f);
 
         // Corte de luz
         foreach(LightsHandler lightsHandler in lightsHandlersList){
@@ -66,19 +71,26 @@ public class PhoneGrabbedTransition : MonoBehaviour
         bathroomMachineSound.enabled = false;
 
 
-
         // Espero 2 segundos
         yield return new WaitForSeconds(2);
+        thunderSound.volume = 0.95f;
 
         // Lluvia
         
         
         // Espero 2 segundos
         yield return new WaitForSecondsRealtime(2);
+        thunderSound.volume = 0.90f;
 
         // Sonido metalico
 
         principalsKey.SetActive(true);
+
+        // Destruir el objeto thunder
+        yield return new WaitForSecondsRealtime(15);
+        thunderSound.volume = 0.80f;
+        Destroy(thunderSound.gameObject);
+
         yield return null;
     }
 

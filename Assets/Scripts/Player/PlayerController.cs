@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
 {
     // Singleton
     public static PlayerController Instance {get; private set;}
+    // Sonidos
+    [SerializeField] private AudioClip walkingSound;
+    [SerializeField] private AudioClip runningSound;
+
     // Character controller
     private CharacterController characterController;
     // Velocidad a la que camina el personaje
