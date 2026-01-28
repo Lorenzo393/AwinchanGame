@@ -14,38 +14,37 @@ public class SituationTextUI : MonoBehaviour
     private void Start(){
         panel = GetComponent<CanvasGroup>();
         panel.alpha = 0;
-        text.alpha = 0;
     }
 
-    public void ShowText(string newText, float showingTime = 1.5f, float displayTime = 3f, float hidingTime = 1.5f){
+    public void ShowText(string newText, float showingTime = 1.5f, float displayTime = 3f, float hidingTime = 2f){
         text.text = newText;
-        StartCoroutine(Show(showingTime));
-        StartCoroutine(Wait(displayTime));
-        StartCoroutine(Hide(hidingTime));
-        //text.text = "";
+        StartCoroutine(ShowWaitHide(showingTime, displayTime, hidingTime));
     }
-    IEnumerator Show(float showingTime){
+    IEnumerator ShowWaitHide(float showingTime, float displayTime, float hidingTime){
         float timer = 0;
-        for(float t = 0 ; t <= 1 ; t = timer / showingTime){
+        for(float t = panel.alpha ; t <= 1f ; t = timer / showingTime){
             panel.alpha = t;
-            text.alpha = t;
             timer += Time.deltaTime;
             yield return null;
         }
         panel.alpha = 1;
-        text.alpha = 1;
-        yield return null;
+
+        StartCoroutine(Wait(displayTime, hidingTime));
     }
 
-    IEnumerator Wait(float displayTime){
+    IEnumerator Wait(float displayTime, float hidingTime){
         yield return new WaitForSecondsRealtime(displayTime);
-        yield return null;
+
+        StartCoroutine(Hide(hidingTime));
     }
     IEnumerator Hide(float hidingTime){
-        yield return new WaitForSecondsRealtime(hidingTime);
+        float timer = 0;
+        for(float t = panel.alpha ; t >= 0f ; t = -((timer / hidingTime) - 1)){
+            panel.alpha = t;
+            timer += Time.deltaTime;
+            yield return null;
+        }
         panel.alpha = 0;
-        text.alpha = 0;
-        yield return null;
     }
     
 
