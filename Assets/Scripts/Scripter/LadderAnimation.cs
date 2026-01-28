@@ -17,6 +17,8 @@ public class LadderAnimation : MonoBehaviour
     [SerializeField] private Transform playerNewTransform;
     // Referencia al script de transicion de volumen
     [SerializeField] private VolumeTransition volumeTransition;
+    // Referencia al sonido de la escalera
+    [SerializeField] private AudioSource ladderClimbSound;
     
 
     private void TriggerLadderAnimation_OnLadderInteraction(object sender, System.EventArgs e){
@@ -46,7 +48,10 @@ public class LadderAnimation : MonoBehaviour
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
         yield return new WaitForSecondsRealtime(1.0f);
         camera2.SetActive(true);
+        ladderClimbSound.enabled = true;
         yield return new WaitForSecondsRealtime(3.0f);
+        ladderClimbSound.enabled = false;
+        Destroy(ladderClimbSound.gameObject);
         WindowAnimation windowAnimation = movingWindow.GetComponent<WindowAnimation>();
         windowAnimation.Interact();
         yield return new WaitForSecondsRealtime(1.0f);
