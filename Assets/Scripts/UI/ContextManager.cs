@@ -24,7 +24,7 @@ public class ContextManager : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             thisImage.enabled = false;
-            closeButton.image.enabled = false;
+            closeButton.gameObject.SetActive(false);
             FadeAnimation.Instance.FadeOutInstant();
             GameInput.Instance.EnablePlayerInput();
             CursorLock.Instance.BlockCursor();

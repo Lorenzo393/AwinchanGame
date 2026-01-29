@@ -11,15 +11,16 @@ public class SituationTextTrigger : MonoBehaviour
     private void StopTrigger_OnStopTriggerEnter(object sender, System.EventArgs e){
         gameObject.SetActive(true);
     }
-    private void Awake(){
-        gameObject.SetActive(false);
-    }
     private void Start(){
+        gameObject.SetActive(false);
         stopTrigger.OnStopTriggerEnter += StopTrigger_OnStopTriggerEnter;
     }
-    
     private void OnTriggerEnter(Collider other){
         SituationTextUI.Instance.ShowText(situationText, showingTime, displayTime, hidingTime);
         Destroy(this.gameObject);
+    }
+
+    private void Oestroy(){
+        stopTrigger.OnStopTriggerEnter -= StopTrigger_OnStopTriggerEnter;
     }
 }
