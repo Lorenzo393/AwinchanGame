@@ -26,6 +26,12 @@ public class PhoneGrabbedTransition : MonoBehaviour
     [SerializeField] private AudioSource bathroomMachineSound;
     [SerializeField] private AudioSource thunderSound;
 
+    [Header ("Situation text")]
+    [SerializeField] private string situationText = "...";
+    [SerializeField] private float showingTime = 0.5f;
+    [SerializeField] private float displayTime = 0.9f;
+    [SerializeField] private float hidingTime = 0.6f;
+
     [Header ("Other things")]
     [SerializeField] private PickUpPhone pickUpPhone;
     [SerializeField] private GameObject principalsKey;
@@ -73,6 +79,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
 
         // Espero 2 segundos
         yield return new WaitForSeconds(2);
+        SituationTextUI.Instance.ShowText(situationText, showingTime, displayTime, hidingTime);
         thunderSound.volume = 0.95f;
 
         // Lluvia

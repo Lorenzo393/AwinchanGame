@@ -51,7 +51,7 @@ public class AwinchanAI : MonoBehaviour
     private void ChasingTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
         StartCoroutine(StartingChasing());
     }
-    private void StopTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
+    private void StopTrigger_OnStopTriggerEnter(object sender, System.EventArgs e){
         navMeshAgent.enabled = false;
         TeleportAwinchan(spawnPosition);
         navMeshAgent.enabled = true;
@@ -80,7 +80,7 @@ public class AwinchanAI : MonoBehaviour
     private void Start(){
         PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OpPickUpPhone;
         chasingTrigger.OnChasingTriggerEnter += ChasingTrigger_OnChasingTriggerEnter;
-        stopTrigger.OnStopTriggerEnter += StopTrigger_OnChasingTriggerEnter;
+        stopTrigger.OnStopTriggerEnter += StopTrigger_OnStopTriggerEnter;
     }
     private void Update(){
         Debug.DrawRay(transform.position, ((playerPosition.position - transform.position).normalized) * viewDistance, Color.red);
