@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using Unity.IntegerTime;
 using UnityEngine;
@@ -9,8 +10,17 @@ public class PlayerController : MonoBehaviour
     // Singleton
     public static PlayerController Instance {get; private set;}
     // Sonidos
-    [SerializeField] private AudioClip walkingSound;
-    [SerializeField] private AudioClip runningSound;
+    [SerializeField] private List<AudioClip> footstepSoundsList;
+    private AudioSource footstepSource;
+    private int soundListLength;
+
+    [SerializeField] private float walkStepInterval = 0.5f;
+    [SerializeField] private float runStepInterval = 0.3f;
+
+    [SerializeField] private float walkPitch = 1f;
+    [SerializeField] private float runPitch = 1.25f;
+
+private float footstepTimer;
 
     // Character controller
     private CharacterController characterController;
@@ -73,6 +83,11 @@ public class PlayerController : MonoBehaviour
         headBob = camera.gameObject.GetComponent<CinemachineBasicMultiChannelPerlin>();
         // Configuro el perfil de ruido
         headBob.NoiseProfile = noiseProfile;
+
+        footstepSource = GetComponent<AudioSource>();
+        soundListLength = footstepSoundsList.Count;
+        footstepSource.clip = footstepSoundsList[UnityEngine.Random.Range(0, soundListLength)];
+        
     }
     private void Update(){
         // Mueve al personaje
@@ -118,16 +133,31 @@ public class PlayerController : MonoBehaviour
             // Caminando
             headBob.AmplitudeGain = 1.05f;
             headBob.FrequencyGain = 1f;
+
+            HandleFootstepSound(walkStepInterval, walkPitch);
         }
         if(inputVector != Vector2.zero && currentSpeed == runningSpeed)
         {
             // Corriendo
             headBob.AmplitudeGain = 1f;
             headBob.FrequencyGain = 2f;
+
+            HandleFootstepSound(runStepInterval, runPitch);
         }
         
     }
-    
+
+        private void HandleFootstepSound(float interval, float pitch){
+        if (!characterController.isGrounded) return;
+
+        footstepTimer -= Time.deltaTime;
+
+        if (footstepTimer <= 0f){
+            footstepSource.pitch = pitch + UnityEngine.Random.Range(-0.05f, 0.05f);
+            footstepSource.PlayOneShot(footstepSoundsList[UnityEngine.Random.Range(0, soundListLength)]);
+            footstepTimer = interval;
+        }
+    }
     private void ConsumeStamina(){
         currentStamina -= staminaDrain * Time.deltaTime;
         if (currentStamina < 0f) currentStamina = 0f;
