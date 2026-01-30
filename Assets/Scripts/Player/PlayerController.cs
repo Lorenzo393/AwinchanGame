@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance {get; private set;}
     // Sonidos
     [SerializeField] private List<AudioClip> footstepSoundsList;
+    [SerializeField] private List<AudioClip> footstepSolidSoundsList;
     private AudioSource footstepSource;
     private int soundListLength;
 
@@ -52,9 +53,13 @@ private float footstepTimer;
     [SerializeField] private NoiseSettings noiseProfile;
     private Vector3 smoothMovement;
     private Vector3 smoothMovementVelocity; 
-
     private CinemachineBasicMultiChannelPerlin headBob;    
 
+    private void LadderAnimation_OnClimbLadder(object sender, System.EventArgs e){
+        footstepSoundsList = footstepSolidSoundsList;
+        soundListLength = footstepSoundsList.Count;
+        footstepSource.volume = 0.5f;
+    }
     private void GameInput_OnSprintActionStarted(object sender, System.EventArgs e){
         isSprinting = true;
     }
@@ -84,10 +89,11 @@ private float footstepTimer;
         // Configuro el perfil de ruido
         headBob.NoiseProfile = noiseProfile;
 
+        // Sonido
         footstepSource = GetComponent<AudioSource>();
         soundListLength = footstepSoundsList.Count;
         footstepSource.clip = footstepSoundsList[UnityEngine.Random.Range(0, soundListLength)];
-        
+        LadderAnimation.Instance.OnClimbLadder += LadderAnimation_OnClimbLadder;
     }
     private void Update(){
         // Mueve al personaje

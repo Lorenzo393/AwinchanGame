@@ -1,8 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class LadderAnimation : MonoBehaviour
 {
+    public static LadderAnimation Instance {get; private set;}
+    // Evento subir escalera
+    public event EventHandler OnClimbLadder;
     // Referencia a la escalera del piso
     [SerializeField] private Transform ladderFloor;
     // Referencia a la escalera de la pared
@@ -24,6 +29,10 @@ public class LadderAnimation : MonoBehaviour
     private void TriggerLadderAnimation_OnLadderInteraction(object sender, System.EventArgs e){
         StartCoroutine(FadeInOut());
     }
+
+    private void Awake(){
+        Instance = this;
+    }
     private void Start(){
         // Subscripcion al evento trigger de la escalera
         TriggerLadderAnimation triggerLadderAnimation = ladderFloor.GetComponent<TriggerLadderAnimation>();
@@ -44,6 +53,7 @@ public class LadderAnimation : MonoBehaviour
         ladderWall.SetActive(true);
 
         // Animacion de subir escalera
+        OnClimbLadder?.Invoke(this, EventArgs.Empty);
         yield return new WaitForSecondsRealtime(2f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
         yield return new WaitForSecondsRealtime(1.0f);
