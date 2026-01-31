@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkPitch = 1f;
     [SerializeField] private float runPitch = 1.25f;
 
-private float footstepTimer;
+    private float footstepTimer;
 
     // Character controller
     private CharacterController characterController;
@@ -92,7 +92,7 @@ private float footstepTimer;
         // Sonido
         footstepSource = GetComponent<AudioSource>();
         soundListLength = footstepSoundsList.Count;
-        footstepSource.clip = footstepSoundsList[UnityEngine.Random.Range(0, soundListLength)];
+        //footstepSource.clip = footstepSoundsList[UnityEngine.Random.Range(0, soundListLength)];
         LadderAnimation.Instance.OnClimbLadder += LadderAnimation_OnClimbLadder;
     }
     private void Update(){
@@ -153,7 +153,7 @@ private float footstepTimer;
         
     }
 
-        private void HandleFootstepSound(float interval, float pitch){
+    private void HandleFootstepSound(float interval, float pitch){
         if (!characterController.isGrounded) return;
 
         footstepTimer -= Time.deltaTime;

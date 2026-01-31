@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ScapeLadderInteraction : MonoBehaviour, IInteractable
 {
+    [SerializeField] private AudioClip interactionSound;
     [SerializeField] private string interactionText = "No puedo irme aun";
     private float showingTime = 0.7f;
     private float displayTime = 1f;
@@ -10,6 +11,7 @@ public class ScapeLadderInteraction : MonoBehaviour, IInteractable
     private bool canInteract = true;
     public void Interact(){
         if (canInteract) {
+            SoundManager.Instance.PlaySound(interactionSound, transform.position);
             SituationTextUI.Instance.ShowText(interactionText, showingTime, displayTime, hidingTime);
             canInteract = false;
             StartCoroutine(ResetInteraction());

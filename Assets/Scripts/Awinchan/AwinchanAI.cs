@@ -35,6 +35,20 @@ public class AwinchanAI : MonoBehaviour
     [SerializeField] private float stopChasingDistance = 50f;
     [SerializeField] private float stopChasingTimer = 3.5f;
     [SerializeField] private float timeSinceLastSeen = 0f;
+
+    [Header ("Sounds")]
+    [SerializeField] private List<AudioClip> footstepsSoundsList;
+    private AudioSource audioSource;
+    [SerializeField] private float walkStepInterval = 0.8f;
+    [SerializeField] private float runStepInterval  = 1f;
+
+    [SerializeField] private float walkPitch = 0.9f;
+    [SerializeField] private float runPitch  = 0.95f;
+
+    private float footstepTimer;
+    private bool wasRunning;
+    
+    private int soundListLength;
     
     private AwinchanStates awinchanState;
     private NavMeshAgent navMeshAgent;
@@ -81,9 +95,12 @@ public class AwinchanAI : MonoBehaviour
         PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OpPickUpPhone;
         chasingTrigger.OnChasingTriggerEnter += ChasingTrigger_OnChasingTriggerEnter;
         stopTrigger.OnStopTriggerEnter += StopTrigger_OnStopTriggerEnter;
+
+        audioSource = GetComponent<AudioSource>();
+        soundListLength = footstepsSoundsList.Count;
     }
     private void Update(){
-        Debug.DrawRay(transform.position, ((playerPosition.position - transform.position).normalized) * viewDistance, Color.red);
+        //Debug.DrawRay(transform.position, ((playerPosition.position - transform.position).normalized) * viewDistance, Color.red);
         switch (awinchanState){
             case AwinchanStates.Roaming:
                 navMeshAgent.destination = roamDirection;
@@ -145,6 +162,7 @@ public class AwinchanAI : MonoBehaviour
                 break;
 
         }
+        HandleAwinchanFootsteps_Time();
     }
     IEnumerator StartingChasing(){
         navMeshAgent.enabled = true;
@@ -214,4 +232,38 @@ public class AwinchanAI : MonoBehaviour
         animator.SetBool("isRunning",false);
         awinchanState = AwinchanStates.Disability;
     }
+
+    private void HandleAwinchanFootsteps_Time(){
+    // Estados sin sonido
+    if (awinchanState == AwinchanStates.Disability || awinchanState == AwinchanStates.Attack) {
+        footstepTimer = 0f;
+        wasRunning = false;
+        return;
+    }
+
+    // Si no se mueve realmente, no contamos tiempo
+    if (navMeshAgent.velocity.sqrMagnitude < 0.1f){
+        footstepTimer = 0f;
+        return;
+    }
+
+    bool isRunning = awinchanState == AwinchanStates.Chasing || awinchanState == AwinchanStates.ChasingSpecial;
+
+    if (isRunning != wasRunning){
+        footstepTimer = 0f;
+        wasRunning = isRunning;
+    }
+
+    float interval = isRunning ? runStepInterval : walkStepInterval;
+    float pitch    = isRunning ? runPitch : walkPitch;
+
+    footstepTimer += Time.deltaTime;
+
+    if (footstepTimer >= interval){
+        audioSource.pitch = pitch + UnityEngine.Random.Range(-0.05f, 0.05f);
+        audioSource.PlayOneShot(footstepsSoundsList[UnityEngine.Random.Range(0, soundListLength)]);
+
+        footstepTimer = 0f;
+    }
+}
 }
