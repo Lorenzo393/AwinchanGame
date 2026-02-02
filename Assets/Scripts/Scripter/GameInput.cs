@@ -54,6 +54,10 @@ public class GameInput : MonoBehaviour
         inputSystem.Player.Pause.performed += Pause_performed;
     }
 
+    private void Start(){
+        GamePauseUI.Instance.OnBackToPlay += GamePauseUI_OnBackToPlay;
+    }
+
     private void OnDestroy(){
         inputSystem.Player.Sprint.started -= Sprint_started;
         inputSystem.Player.Sprint.canceled -= Sprint_canceled;
@@ -106,5 +110,8 @@ public class GameInput : MonoBehaviour
     public void EnableCameraInput(){
         cinemachineInputAxisController.enabled = true;
         inputSystem.Player.Interact.performed += Interact_performed;
+    }
+    private void GamePauseUI_OnBackToPlay(object sender, System.EventArgs e){
+        OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
 }
