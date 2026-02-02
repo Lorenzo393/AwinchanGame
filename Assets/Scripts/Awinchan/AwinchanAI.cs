@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class AwinchanAI : MonoBehaviour
 {
@@ -14,6 +17,8 @@ public class AwinchanAI : MonoBehaviour
         Attack,
         MissPlayer,
     }
+    [SerializeField] private Transform awinchanFace;
+    [SerializeField] private GameObject playerCamera;
     [SerializeField] private Transform direction;
     [Header ("SpotsPositions")]
     [SerializeField] private Transform hiddenPosition;
@@ -57,6 +62,7 @@ public class AwinchanAI : MonoBehaviour
     private float runningSpeed = 12f;
     private float walkingSpeed = 8f;
     private float deathSpeed = 0f;
+    private bool isKilling = false;
 
 
     private void PickUpPhone_OpPickUpPhone(object sender, System.EventArgs e){
@@ -115,8 +121,8 @@ public class AwinchanAI : MonoBehaviour
                 navMeshAgent.destination = playerPosition.position;
                 direction.position = playerPosition.position;
                 if(Vector3.Distance(transform.position, playerPosition.position) < reachedPositionDistance){
-                    Debug.Log("Attack");
-                    //awinchanState = AwinchanStates.Attack;
+                    //Debug.Log("Attack");
+                    awinchanState = AwinchanStates.Attack;
                 }
                 if(Vector3.Distance(transform.position, playerPosition.position) > stopChasingDistance){
                     animator.SetBool("isRunning",false);
@@ -140,14 +146,20 @@ public class AwinchanAI : MonoBehaviour
                 navMeshAgent.destination = playerPosition.position;
                 direction.position = playerPosition.position;
                 if(Vector3.Distance(transform.position, playerPosition.position) < reachedPositionDistance){
-                    Debug.Log("Attack");
-                    //awinchanState = AwinchanStates.Attack;
+                    //Debug.Log("Attack");
+                    awinchanState = AwinchanStates.Attack;
                 }
                 break;
 
             case AwinchanStates.Attack:
-                Debug.Log("Atacando");
-                // Animacion atacar
+                animator.SetBool("isDeath",false);
+                animator.SetBool("isWalking",false);
+                animator.SetBool("isRunning",false);
+                if (!isKilling){
+                    isKilling = true;
+                    StartCoroutine(AwinchanAttack());
+                }
+                
                 break;
 
             case AwinchanStates.MissPlayer:
@@ -234,36 +246,54 @@ public class AwinchanAI : MonoBehaviour
     }
 
     private void HandleAwinchanFootsteps_Time(){
-    // Estados sin sonido
-    if (awinchanState == AwinchanStates.Disability || awinchanState == AwinchanStates.Attack) {
-        footstepTimer = 0f;
-        wasRunning = false;
-        return;
+        if (awinchanState == AwinchanStates.Disability || awinchanState == AwinchanStates.Attack) {
+            footstepTimer = 0f;
+            wasRunning = false;
+            return;
+        }
+
+        if (navMeshAgent.velocity.sqrMagnitude < 0.1f){
+            footstepTimer = 0f;
+            return;
+        }
+
+        bool isRunning = awinchanState == AwinchanStates.Chasing || awinchanState == AwinchanStates.ChasingSpecial;
+
+        if (isRunning != wasRunning){
+            footstepTimer = 0f;
+            wasRunning = isRunning;
+        }
+
+        float interval = isRunning ? runStepInterval : walkStepInterval;
+        float pitch    = isRunning ? runPitch : walkPitch;
+
+        footstepTimer += Time.deltaTime;
+
+        if (footstepTimer >= interval){
+            audioSource.pitch = pitch + UnityEngine.Random.Range(-0.05f, 0.05f);
+            audioSource.PlayOneShot(footstepsSoundsList[UnityEngine.Random.Range(0, soundListLength)]);
+
+            footstepTimer = 0f;
+        }
     }
 
-    // Si no se mueve realmente, no contamos tiempo
-    if (navMeshAgent.velocity.sqrMagnitude < 0.1f){
-        footstepTimer = 0f;
-        return;
+    IEnumerator AwinchanAttack(){
+        CinemachineCamera playerVCam = playerCamera.GetComponent<CinemachineCamera>();
+
+        GameInput.Instance.BlockCameraInput();
+        GameInput.Instance.BlockPlayerInput();
+        //playerCamera.Follow = awinchanFace;
+        playerVCam.LookAt = awinchanFace;
+        
+        Destroy(playerCamera.GetComponent<CinemachinePanTilt>());
+        playerVCam.AddComponent<CinemachineHardLookAt>();
+        
+        yield return new WaitForSecondsRealtime(1.5f);
+        yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
+        yield return new WaitForSecondsRealtime(2.0f);
+        GameInput.Instance.EnableCameraInput();
+        GameInput.Instance.EnablePlayerInput();
+        CursorLock.Instance.EnableCursor();
+        SceneManager.LoadScene(0);
     }
-
-    bool isRunning = awinchanState == AwinchanStates.Chasing || awinchanState == AwinchanStates.ChasingSpecial;
-
-    if (isRunning != wasRunning){
-        footstepTimer = 0f;
-        wasRunning = isRunning;
-    }
-
-    float interval = isRunning ? runStepInterval : walkStepInterval;
-    float pitch    = isRunning ? runPitch : walkPitch;
-
-    footstepTimer += Time.deltaTime;
-
-    if (footstepTimer >= interval){
-        audioSource.pitch = pitch + UnityEngine.Random.Range(-0.05f, 0.05f);
-        audioSource.PlayOneShot(footstepsSoundsList[UnityEngine.Random.Range(0, soundListLength)]);
-
-        footstepTimer = 0f;
-    }
-}
 }
