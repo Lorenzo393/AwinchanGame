@@ -15,6 +15,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
     [SerializeField] private List<LightsHandler> lightsHandlersList;
     [SerializeField] private List<GameObject> lightsList;
     [SerializeField] private GameObject deskLamp;
+    [SerializeField] private GameObject deskLamp2;
 
     [Header ("Triggers")]
     [SerializeField] private GameObject chasingTrigger;
@@ -71,6 +72,7 @@ public class PhoneGrabbedTransition : MonoBehaviour
         foreach(GameObject light in lightsList) Destroy(light);
 
         DestroyLampEmition(deskLamp);
+        DestroyLampEmition(deskLamp2);
 
         fridgeSound.enabled = false;
         janitorsMachineSound.enabled = false;
