@@ -23,17 +23,7 @@ public class MainMenuButtons : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        resolutions = Screen.resolutions;
-
-        resolutionsDropdown.ClearOptions();
-        
-        List<String> resolutionsStrings = new List<string>();
-
-        foreach(Resolution res in resolutions){
-            resolutionsStrings.Add(res.ToString());
-        }
-
-        resolutionsDropdown.AddOptions(resolutionsStrings);
+        ResolutionsInitialization();
 
         playButton.onClick.AddListener(() =>
         {
@@ -70,5 +60,28 @@ public class MainMenuButtons : MonoBehaviour
         {
             
         });
+    }
+
+    private void ResolutionsInitialization(){
+        resolutions = Screen.resolutions;
+
+        resolutionsDropdown.ClearOptions();
+        
+        List<String> resolutionsStrings = new List<string>();
+
+        int numberOfResolutions = 0;
+        int actualResolutionIndex = 0;
+
+        foreach(Resolution res in resolutions){
+            resolutionsStrings.Add(res.ToString());
+            numberOfResolutions++;
+            if(res.width == Screen.currentResolution.width && res.height == Screen.currentResolution.height){
+                actualResolutionIndex = numberOfResolutions;
+            }
+        }
+
+        resolutionsDropdown.AddOptions(resolutionsStrings);
+        resolutionsDropdown.value = actualResolutionIndex;
+        resolutionsDropdown.RefreshShownValue();
     }
 }

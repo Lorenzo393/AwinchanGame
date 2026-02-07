@@ -53,6 +53,7 @@ public class LadderAnimation : MonoBehaviour
         ladderWall.SetActive(true);
 
         // Animacion de subir escalera
+        ShowHideHud.Instance.Hide();
         OnClimbLadder?.Invoke(this, EventArgs.Empty);
         yield return new WaitForSecondsRealtime(2f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeOut());
@@ -66,6 +67,7 @@ public class LadderAnimation : MonoBehaviour
         windowAnimation.Interact();
         yield return new WaitForSecondsRealtime(1.0f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
+        ShowHideHud.Instance.Show();
         volumeTransition.SetVolume(0.009f);
         yield return new WaitForSecondsRealtime(2.0f);
         volumeTransition.SetVolume(0.003f);

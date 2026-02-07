@@ -43,6 +43,7 @@ public class AwinchanAI : MonoBehaviour
 
     [Header ("Sounds")]
     [SerializeField] private List<AudioClip> footstepsSoundsList;
+    [SerializeField] private AudioSource awinchanAttack;
     private AudioSource audioSource;
     [SerializeField] private float walkStepInterval = 0.8f;
     [SerializeField] private float runStepInterval  = 1f;
@@ -157,6 +158,7 @@ public class AwinchanAI : MonoBehaviour
                 animator.SetBool("isRunning",false);
                 if (!isKilling){
                     isKilling = true;
+
                     StartCoroutine(AwinchanAttack());
                 }
                 
@@ -278,8 +280,9 @@ public class AwinchanAI : MonoBehaviour
     }
 
     IEnumerator AwinchanAttack(){
-        CinemachineCamera playerVCam = playerCamera.GetComponent<CinemachineCamera>();
+        awinchanAttack.enabled = true;
 
+        CinemachineCamera playerVCam = playerCamera.GetComponent<CinemachineCamera>();
         GameInput.Instance.BlockCameraInput();
         GameInput.Instance.BlockPlayerInput();
         //playerCamera.Follow = awinchanFace;
@@ -287,10 +290,12 @@ public class AwinchanAI : MonoBehaviour
         
         Destroy(playerCamera.GetComponent<CinemachinePanTilt>());
         playerVCam.AddComponent<CinemachineHardLookAt>();
+        ShowHideHud.Instance.Hide();
         
-        yield return new WaitForSecondsRealtime(1.5f);
+        
+        yield return new WaitForSecondsRealtime(1.3f);
         yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
-        yield return new WaitForSecondsRealtime(2.0f);
+        yield return new WaitForSecondsRealtime(1.8f);
         GameInput.Instance.EnableCameraInput();
         GameInput.Instance.EnablePlayerInput();
         CursorLock.Instance.EnableCursor();
