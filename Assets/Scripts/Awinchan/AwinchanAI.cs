@@ -16,6 +16,8 @@ public class AwinchanAI : MonoBehaviour
         ChasingSpecial,
         Attack,
         MissPlayer,
+        Camping25,
+        Camping26,
     }
     [SerializeField] private Transform awinchanFace;
     [SerializeField] private GameObject playerCamera;
@@ -40,6 +42,12 @@ public class AwinchanAI : MonoBehaviour
     [SerializeField] private float stopChasingDistance = 50f;
     [SerializeField] private float stopChasingTimer = 3.5f;
     [SerializeField] private float timeSinceLastSeen = 0f;
+
+    [Header ("Camping")]
+    [SerializeField] private Trigger25 trigger25;
+    [SerializeField] private Trigger26 trigger26;
+    [SerializeField] private Transform camping25;
+    [SerializeField] private Transform camping26;
 
     [Header ("Sounds")]
     [SerializeField] private List<AudioClip> footstepsSoundsList;
@@ -70,9 +78,21 @@ public class AwinchanAI : MonoBehaviour
         TeleportAwinchan(firstPosition);
     }
     private void ChasingTrigger_OnChasingTriggerEnter(object sender, System.EventArgs e){
+        trigger25.gameObject.SetActive(true);
+        trigger26.gameObject.SetActive(true);
         StartCoroutine(StartingChasing());
     }
     private void StopTrigger_OnStopTriggerEnter(object sender, System.EventArgs e){
+        trigger25.OnTrigger25Enter -= Trigger25_OnTrigger25Enter;
+        trigger25.OnTrigger25Exit -= Trigger25_OnTrigger25Exit;
+        trigger26.OnTrigger26Enter -= Trigger26_OnTrigger26Enter;
+        trigger26.OnTrigger26Exit -= Trigger26_OnTrigger26Exit;
+        
+        Destroy(trigger25.gameObject);
+        Destroy(trigger26.gameObject);
+        Destroy(camping25.gameObject);
+        Destroy(camping26.gameObject);
+
         navMeshAgent.enabled = false;
         TeleportAwinchan(spawnPosition);
         navMeshAgent.enabled = true;
@@ -82,6 +102,18 @@ public class AwinchanAI : MonoBehaviour
         animator.SetBool("isWalking",true);
 
         awinchanState = AwinchanStates.Roaming;
+    }
+    private void Trigger25_OnTrigger25Enter(object sender, System.EventArgs e){
+        awinchanState = AwinchanStates.Camping25;
+    }
+    private void Trigger25_OnTrigger25Exit(object sender, System.EventArgs e){
+        awinchanState = AwinchanStates.ChasingSpecial;
+    }
+    private void Trigger26_OnTrigger26Enter(object sender, System.EventArgs e){
+        awinchanState = AwinchanStates.Camping26;
+    }
+    private void Trigger26_OnTrigger26Exit(object sender, System.EventArgs e){
+        awinchanState = AwinchanStates.ChasingSpecial;
     }
     private void Awake(){
         Instance = this;
@@ -102,6 +134,11 @@ public class AwinchanAI : MonoBehaviour
         PickUpPhone.Instance.OnPickUpPhone += PickUpPhone_OpPickUpPhone;
         chasingTrigger.OnChasingTriggerEnter += ChasingTrigger_OnChasingTriggerEnter;
         stopTrigger.OnStopTriggerEnter += StopTrigger_OnStopTriggerEnter;
+
+        trigger25.OnTrigger25Enter += Trigger25_OnTrigger25Enter;
+        trigger25.OnTrigger25Exit += Trigger25_OnTrigger25Exit;
+        trigger26.OnTrigger26Enter += Trigger26_OnTrigger26Enter;
+        trigger26.OnTrigger26Exit += Trigger26_OnTrigger26Exit;
 
         audioSource = GetComponent<AudioSource>();
         soundListLength = footstepsSoundsList.Count;
@@ -144,6 +181,10 @@ public class AwinchanAI : MonoBehaviour
                 break;
 
             case AwinchanStates.ChasingSpecial:
+                animator.SetBool("isDeath",false);
+                animator.SetBool("isWalking",false);
+                animator.SetBool("isRunning",true);
+                navMeshAgent.speed = runningSpeed;
                 navMeshAgent.destination = playerPosition.position;
                 direction.position = playerPosition.position;
                 if(Vector3.Distance(transform.position, playerPosition.position) < reachedPositionDistance){
@@ -174,6 +215,30 @@ public class AwinchanAI : MonoBehaviour
                 navMeshAgent.speed = deathSpeed;
                 animator.SetBool("isDeath",true);
                 break;
+            
+            case AwinchanStates.Camping25:
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isWalking", true);
+                navMeshAgent.speed = walkingSpeed;
+                navMeshAgent.destination = camping25.position;
+
+                if(Vector3.Distance(transform.position, camping25.position) < reachedPositionDistance){
+                    animator.SetBool("isWalking", false);
+                    animator.SetBool("isDeath", true);
+                }
+                break;
+
+            case AwinchanStates.Camping26:
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isWalking", true);
+                navMeshAgent.speed = walkingSpeed;
+                navMeshAgent.destination = camping26.position;
+
+                if(Vector3.Distance(transform.position, camping26.position) < reachedPositionDistance){
+                    animator.SetBool("isWalking", false);
+                    animator.SetBool("isDeath", true);
+                }
+                break;
 
         }
         HandleAwinchanFootsteps_Time();
@@ -181,10 +246,6 @@ public class AwinchanAI : MonoBehaviour
     IEnumerator StartingChasing(){
         navMeshAgent.enabled = true;
         yield return new WaitForSecondsRealtime(1f);
-        navMeshAgent.speed = runningSpeed;
-
-        animator.SetBool("isDeath",false);
-        animator.SetBool("isRunning",true);
 
         awinchanState = AwinchanStates.ChasingSpecial;
 

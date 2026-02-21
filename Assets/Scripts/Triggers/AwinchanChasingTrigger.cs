@@ -7,8 +7,7 @@ public class AwinchanChasingTrigger : MonoBehaviour
     private void Start(){
         gameObject.SetActive(false);
     }
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other){
         OnChasingTriggerEnter?.Invoke(this, EventArgs.Empty);
         Destroy(this.gameObject);
     }
