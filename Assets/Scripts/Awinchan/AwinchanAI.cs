@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -9,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class AwinchanAI : MonoBehaviour
 {
     public static AwinchanAI Instance {get; private set;}
+    public event EventHandler OnAwinchanAttack;
     private enum AwinchanStates{
         Disability,
         Roaming,
@@ -42,13 +44,13 @@ public class AwinchanAI : MonoBehaviour
     [SerializeField] private float stopChasingDistance = 50f;
     [SerializeField] private float stopChasingTimer = 3.5f;
     [SerializeField] private float timeSinceLastSeen = 0f;
-
     [Header ("Camping")]
     [SerializeField] private Trigger25 trigger25;
     [SerializeField] private Trigger26 trigger26;
     [SerializeField] private Transform camping25;
     [SerializeField] private Transform camping26;
-
+    [Header ("Deactivate Awinchan")]
+    [SerializeField] private LightSwitchInteraction deactivationButton;
     [Header ("Sounds")]
     [SerializeField] private List<AudioClip> footstepsSoundsList;
     [SerializeField] private AudioSource awinchanAttack;
@@ -115,6 +117,11 @@ public class AwinchanAI : MonoBehaviour
     private void Trigger26_OnTrigger26Exit(object sender, System.EventArgs e){
         awinchanState = AwinchanStates.ChasingSpecial;
     }
+    private void DeactivationButton_OnClickSwitch(object sender, System.EventArgs e){
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isWalking", false);
+        awinchanState = AwinchanStates.Disability;
+    }
     private void Awake(){
         Instance = this;
 
@@ -139,6 +146,8 @@ public class AwinchanAI : MonoBehaviour
         trigger25.OnTrigger25Exit += Trigger25_OnTrigger25Exit;
         trigger26.OnTrigger26Enter += Trigger26_OnTrigger26Enter;
         trigger26.OnTrigger26Exit += Trigger26_OnTrigger26Exit;
+
+        deactivationButton.OnClickSwitch += DeactivationButton_OnClickSwitch;
 
         audioSource = GetComponent<AudioSource>();
         soundListLength = footstepsSoundsList.Count;
@@ -200,7 +209,7 @@ public class AwinchanAI : MonoBehaviour
                 if (!isKilling){
                     isKilling = true;
 
-                    StartCoroutine(AwinchanAttack());
+                    AwinchanAttack();
                 }
                 
                 break;
@@ -278,7 +287,7 @@ public class AwinchanAI : MonoBehaviour
     }
 
     private Vector3 GetRoamingPosition(){
-        return roamingPositionsList[Random.Range(0,roamingPositionsList.Count)].position;
+        return roamingPositionsList[UnityEngine.Random.Range(0,roamingPositionsList.Count)].position;
     }
 
     private void TRoamingChasing(){
@@ -340,26 +349,32 @@ public class AwinchanAI : MonoBehaviour
         }
     }
 
-    IEnumerator AwinchanAttack(){
-        awinchanAttack.enabled = true;
+    // IEnumerator AwinchanAttack(){
+    //     awinchanAttack.enabled = true;
 
-        CinemachineCamera playerVCam = playerCamera.GetComponent<CinemachineCamera>();
-        GameInput.Instance.BlockCameraInput();
-        GameInput.Instance.BlockPlayerInput();
-        //playerCamera.Follow = awinchanFace;
-        playerVCam.LookAt = awinchanFace;
+    //     OnAwinchanAttack?.Invoke(this, EventArgs.Empty);
+
+    //     CinemachineCamera playerVCam = playerCamera.GetComponent<CinemachineCamera>();
+    //     GameInput.Instance.BlockCameraInput();
+    //     GameInput.Instance.BlockPlayerInput();
         
-        Destroy(playerCamera.GetComponent<CinemachinePanTilt>());
-        playerVCam.AddComponent<CinemachineHardLookAt>();
-        ShowHideHud.Instance.Hide();
+    //     playerVCam.LookAt = awinchanFace;
+        
+    //     Destroy(playerCamera.GetComponent<CinemachinePanTilt>());
+    //     playerVCam.AddComponent<CinemachineHardLookAt>();
+    //     ShowHideHud.Instance.Hide();
         
         
-        yield return new WaitForSecondsRealtime(1.3f);
-        yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
-        yield return new WaitForSecondsRealtime(1.8f);
-        GameInput.Instance.EnableCameraInput();
-        GameInput.Instance.EnablePlayerInput();
-        CursorLock.Instance.EnableCursor();
-        SceneManager.LoadScene(0);
+    //     yield return new WaitForSecondsRealtime(1.3f);
+    //     yield return StartCoroutine(FadeAnimation.Instance.FadeIn());
+    //     yield return new WaitForSecondsRealtime(1.8f);
+    //     GameInput.Instance.EnableCameraInput();
+    //     GameInput.Instance.EnablePlayerInput();
+    //     CursorLock.Instance.EnableCursor();
+    //     SceneManager.LoadScene(0);
+    // }
+    private void AwinchanAttack(){
+        awinchanAttack.enabled = true;
+        OnAwinchanAttack?.Invoke(this, EventArgs.Empty);
     }
 }

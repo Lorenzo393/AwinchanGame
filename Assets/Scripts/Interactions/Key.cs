@@ -13,6 +13,7 @@ public class Key : MonoBehaviour, IInteractable
         Principals,
         Library,
         Outside,
+        Secret
     }
     public void Interact(){
         PlayerInventory.Instance.AddKey(keyTipe);

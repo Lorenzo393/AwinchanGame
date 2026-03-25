@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4c5b051c9ffa8264eb24aff9e76e4625
+timeCreated: 1430218501
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 35718
+  packageName: Next-gen Electronics Pack
+  packageVersion: 1.0
+  assetPath: Assets/Next-gen Electronics Pack/Prefabs/speaker.prefab
+  uploadId: 61333

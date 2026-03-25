@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ca55bdf99f5d5784a830e70649b75484
+timeCreated: 1430218229
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 35718
+  packageName: Next-gen Electronics Pack
+  packageVersion: 1.0
+  assetPath: Assets/Next-gen Electronics Pack/Materials/keyboard.mat
+  uploadId: 61333
