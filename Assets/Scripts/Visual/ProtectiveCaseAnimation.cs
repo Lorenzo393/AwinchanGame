@@ -34,5 +34,4 @@ public class ProtectiveCaseAnimation : MonoBehaviour, IInteractable
         }
         isMoving = false;
     }
-
 }

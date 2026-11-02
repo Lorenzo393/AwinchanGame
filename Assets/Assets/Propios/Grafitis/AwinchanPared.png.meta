@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fdaccd023086ab949a9b2ec7791b6692
+guid: a17595f6d7f75814ba28f364c953b30b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -94,7 +94,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -113,7 +113,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fed534f7edfee5c4a957999640a1cee8
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
