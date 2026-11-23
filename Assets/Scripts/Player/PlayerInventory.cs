@@ -21,7 +21,6 @@ public class PlayerInventory : MonoBehaviour
         }
         currentKey = keysList[listIndex];
         OnCurrentKeyModification?.Invoke(this, EventArgs.Empty);
-        //Debug.Log("Left Inventory");
     }
     private void GameInput_OnInventoryRight(object sender, System.EventArgs e){
         if((listIndex + 1) > (keysList.Count - 1)){
@@ -31,7 +30,6 @@ public class PlayerInventory : MonoBehaviour
         }
         currentKey = keysList[listIndex];
         OnCurrentKeyModification?.Invoke(this, EventArgs.Empty);
-        //Debug.Log("Right Inventory");
     }
     private void Awake(){
         // Inicializo la instancia del objeto jugador
@@ -50,7 +48,7 @@ public class PlayerInventory : MonoBehaviour
     }
     public void AddKey(Key.KeyTipe key){
         keysList.Add(key);
-        Debug.Log("Grab: " + key);
+        //Debug.Log("Grab: " + key);
     }
     public void RemoveKey(Key.KeyTipe key){
         keysList.Remove(key);
