@@ -12,33 +12,20 @@ public class InventoryUI2 : MonoBehaviour
         Library,
         Outside,
     */
-
     private TextMeshProUGUI inventoryText;
-    // private void PlayerInventory_OnCurrentKeyModification(object sender, System.EventArgs e){
-    //     string actualKey = PlayerInventory.Instance.GetCurrentKey().ToString();
-    //     inventoryText.text = actualKey switch
-    //     {
-    //         case "UnoCuatro":
-
-    //             break;
-    //         case "DosCinco":
-
-    //             break;
-    //         case "DosSeis":
-
-    //             break;
-    //         case "Principals":
-
-    //             break;
-    //         case "Library":
-
-    //             break;
-    //         case "Outside":
-
-    //             break;
-    //     };
-    // }
-
+    private void PlayerInventory_OnCurrentKeyModification(object sender, System.EventArgs e){
+        string actualKey = PlayerInventory.Instance.GetCurrentKey().ToString();
+        inventoryText.text = actualKey switch
+        {
+            "UnoCuatro" => "Inventory: " + "1-4",
+            "DosCinco" => "Inventory: " + "2-5",
+            "DosSeis" => "Inventory: " + "2-6",
+            "Principals" => "Inventory: " + "Principals",
+            "Library" => "Inventory: " + "Library",
+            "Outside" => "Inventory: " + "Outside",
+            _ => "Inventory: " + actualKey,
+        };
+    }
     private void Awake(){
         inventoryText = GetComponent<TextMeshProUGUI>();
     }
@@ -46,6 +33,6 @@ public class InventoryUI2 : MonoBehaviour
         // LLave inicial
         inventoryText.text = "Inventory: " + PlayerInventory.Instance.GetCurrentKey();
         // Evento modificacion del la llave actual
-        //PlayerInventory.Instance.OnCurrentKeyModification += PlayerInventory_OnCurrentKeyModification;
+        PlayerInventory.Instance.OnCurrentKeyModification += PlayerInventory_OnCurrentKeyModification;
     }
 }
