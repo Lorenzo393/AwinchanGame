@@ -26,16 +26,47 @@ public class InventoryUI : MonoBehaviour
 
     private void PlayerInventory_OnCurrentKeyModification(object sender, System.EventArgs e){
         string actualKey = PlayerInventory.Instance.GetCurrentKey().ToString();
-        inventoryText.text = actualKey switch
-        {
-            "UnoCuatro" => "1-4",
-            "DosCinco" => "2-5",
-            "DosSeis" => "2-6",
-            "Principals" => "Principals",
-            "Library" => "Library",
-            "Outside" => "Outside",
-            _ => "" + actualKey,
-        };
+        // inventoryText.text = actualKey switch
+        // {
+        //     "UnoCuatro" => "1-4",
+        //     "DosCinco" => "2-5",
+        //     "DosSeis" => "2-6",
+        //     "Principals" => "Principals",
+        //     "Library" => "Library",
+        //     "Outside" => "Outside",
+        //     _ => "" + actualKey,
+        // };
+
+        switch(actualKey){
+            case "UnoCuatro":
+                inventoryText.text = "1-4";
+                inventoryImage.sprite = UnoCuatro;
+                break;
+            case "DosCinco":
+                inventoryText.text = "2-5";
+                inventoryImage.sprite = DosCinco;
+                break;
+            case "DosSeis":
+                inventoryText.text = "2-6";
+                inventoryImage.sprite = DosSeis;
+                break;
+            case "Principals":
+                inventoryText.text = "Principals";
+                inventoryImage.sprite = Principals;
+                break;
+            case "Library":
+                inventoryText.text = "Library";
+                inventoryImage.sprite = Library;
+                break;
+            case "Outside":
+                inventoryText.text = "Outside";
+                inventoryImage.sprite = Outside;
+                break;
+            default:
+                inventoryText.text = "Hand";
+                inventoryImage.sprite = Hand;
+                break;
+        }
     }
 
 
