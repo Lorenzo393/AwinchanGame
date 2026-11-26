@@ -1,35 +1,31 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using System.Collections;
 
 public class LoadingTransition : MonoBehaviour
 {
-    [SerializeField] private int sceneBuildIndex = 2;
-    [SerializeField] private Slider progressBar;
-    [SerializeField] private float minimumDisplayTime = 0.25f;
+    [SerializeField] private int sceneIndex = 2;
 
-    private void Start(){
-        StartCoroutine(LoadingScene());
+    private void Start()
+    {
+        StartCoroutine(LoadGame());
     }
 
-    private IEnumerator LoadingScene(){
-        yield return new WaitForSecondsRealtime(minimumDisplayTime);
+    private IEnumerator LoadGame()
+    {
+        // Comenzar la carga asíncrona
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneBuildIndex);
+        // Evitar que la escena se active automáticamente
+        operation.allowSceneActivation = false;
 
-        if (operation == null){
-            Debug.LogError("No se pudo iniciar la carga de la escena.");
-            yield break;
-        }
-
-        while (!operation.isDone){
-            float progress = Mathf.Clamp01(operation.progress / 0.9f);
-
-            if (progressBar != null)
-                progressBar.value = progress;
-
+        // Esperar hasta que esté preparada
+        while (operation.progress < 0.9f)
+        {
             yield return null;
         }
+
+        // La escena está lista para activarse
+        operation.allowSceneActivation = true;
     }
 }
